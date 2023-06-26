@@ -10,24 +10,22 @@ namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = RoleConstants.Admin)]
+    //[Authorize(Roles = RoleConstants.Admin)]
     public class StudentController : ControllerBase
     {
         private readonly IMapper _mapper;
         private readonly IStudentService _studentService;
-        public StudentController(IStudentService studentService, IMapper mapper) 
+        public StudentController(IStudentService studentService, IMapper mapper)
         {
             _studentService = studentService;
             _mapper = mapper;
         }
 
         [HttpGet]
-        [Route("GetAllStudents")]
         public async Task<List<Student>> GetAll() =>
             await _studentService.GetAllStudentAsync();
 
-        [HttpGet]
-        [Route("GetStudentById/Id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(string id)
         {
             var student = await _studentService.GetByIdAsync(id);
@@ -40,7 +38,6 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpPost]
-        [Route("CreateStudent")]
         public async Task<IActionResult> Create([FromForm] CreateStudentModel createStudentModel) 
         {
             var student = _mapper.Map<Student>(createStudentModel);
@@ -49,8 +46,7 @@ namespace AttendanceControlSystem.Controllers
             return CreatedAtAction(nameof(GetAll), new { Id = student.Id }, student);
         }
 
-        [HttpPost]
-        [Route("UpdateStudent")]
+        [HttpPut]
         public async Task<IActionResult> Update([FromForm] StudentModel studentModel)
         {
             var student = _mapper.Map<Student>(studentModel);
@@ -58,8 +54,7 @@ namespace AttendanceControlSystem.Controllers
             return Ok($"The student with id '{studentModel.Id}' was successfully updated");
         }
 
-        [HttpDelete]
-        [Route("DeleteStudent/id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(string id)
         {
             await _studentService.RemoveAsync(id);
