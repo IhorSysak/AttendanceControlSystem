@@ -1,0 +1,29 @@
+<div class="container my-5">
+    <h1 class="mb-3">Students</h1>
+
+    <button type="submit" class="btn btn-success" style="float: right;" (click)="redirectToCreatingPage()">Create Student</button>
+
+    <table class="table" *ngIf="students && students.length > 0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Full Name</th>
+                <th>Course</th>
+                <th>Group</th>
+                <th>File</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let student of students">
+                <td>{{student.id}}</td>
+                <td>{{student.fullName}}</td>
+                <td>{{student.course}}</td>
+                <td>{{student.group}}</td>
+                <td>{{student.file}}</td>
+                <td><a [routerLink]="['students', 'edit', student.id]">Edit</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="!students || students.length <=0">No students found</p>
+</div>

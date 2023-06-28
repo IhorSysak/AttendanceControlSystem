@@ -15,7 +15,7 @@ namespace AttendanceControlSystem.Entity
         public int Course { get; set; }
         [BsonElement("group")]
         public string Group { get; set; } = null!;
-        [BsonElement("Photo")]
-        public byte[] Photo { get; set; } = null!;
+        [BsonElement("ImagePath")]
+        public string ImagePath { get; set; } = null!;
     }
 }

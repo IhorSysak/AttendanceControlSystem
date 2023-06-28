@@ -26,7 +26,7 @@ namespace AttendanceControlSystem.Controllers
             await _studentService.GetAllStudentAsync();
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id)
+        public async Task<IActionResult> Get([FromRoute] string id)
         {
             var student = await _studentService.GetByIdAsync(id);
             if (student == null)
@@ -38,7 +38,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromForm] CreateStudentModel createStudentModel) 
+        public async Task<IActionResult> Create([FromBody] CreateStudentModel createStudentModel) 
         {
             var student = _mapper.Map<Student>(createStudentModel);
 
@@ -47,15 +47,15 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromForm] StudentModel studentModel)
+        public async Task<IActionResult> Update([FromBody] StudentModel studentModel)
         {
             var student = _mapper.Map<Student>(studentModel);
             await _studentService.UpdateAsync(studentModel.Id, student);
-            return Ok($"The student with id '{studentModel.Id}' was successfully updated");
+            return Ok(student);
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete([FromRoute] string id)
         {
             await _studentService.RemoveAsync(id);
             return NoContent();

@@ -20,7 +20,7 @@ namespace AttendanceControlSystem.AutoMapperProfiles
                 .ForPath(a => a.Student.FullName, m => m.MapFrom(x => x.Student.FullName))
                 .ForPath(a => a.Student.Course, m => m.MapFrom(x => x.Student.Course))
                 .ForPath(a => a.Student.Group, m => m.MapFrom(x => x.Student.Group))
-                .ForPath(a => a.Student.Photo, m => m.MapFrom(x => x.Student.Photo));
+                .ForPath(a => a.Student.ImagePath, m => m.MapFrom(x => x.Student.ImagePath));
         }
     }
 }
