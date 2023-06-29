@@ -18,7 +18,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="file" class="form-label">File</label>
-                    <input type="text" class="form-control" id="file" name="file" [(ngModel)]="addStudentRequest.file">
+                    <input type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)">
                 </div>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>

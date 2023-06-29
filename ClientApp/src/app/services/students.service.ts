@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
 import { Student } from '../models/student.model';
@@ -22,7 +22,7 @@ export class StudentsService {
   }
 
   getStudent(id: string): Observable<Student> {
-    return this.http.get<Student>(this.baseApiUrl + '/api/Student' + '/' + id);
+    return this.http.get<Student>(this.baseApiUrl + '/api/Student/' + id);
   }
 
   editStudent(editStudentRequest: Student): Observable<Student> {
@@ -30,6 +30,10 @@ export class StudentsService {
   }
 
   deleteStudent(id: string): Observable<string> {
-    return this.http.delete<string>(this.baseApiUrl + '/api/Student' + '/' + id);
+    return this.http.delete<string>(this.baseApiUrl + '/api/Student/' + id);
+  }
+
+  storeImage(studentFormData: FormData): Observable<HttpEvent<Object>> {
+    return this.http.post(this.baseApiUrl + '/api/Upload', studentFormData, { reportProgress: true, observe: 'events' })
   }
 }

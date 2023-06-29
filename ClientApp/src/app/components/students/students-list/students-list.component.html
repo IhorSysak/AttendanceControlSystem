@@ -20,7 +20,7 @@
                 <td>{{student.fullName}}</td>
                 <td>{{student.course}}</td>
                 <td>{{student.group}}</td>
-                <td>{{student.file}}</td>
+                <td><img [src]="createImage(student.imagePath)" alt="profile picture" style="width:70px; height:90px;"></td>
                 <td><a [routerLink]="['students', 'edit', student.id]">Edit</a></td>
             </tr>
         </tbody>

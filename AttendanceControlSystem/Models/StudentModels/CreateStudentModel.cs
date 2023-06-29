@@ -12,6 +12,6 @@ namespace AttendanceControlSystem.Models.StudentModels
         [MinLength(3, ErrorMessage = "Group must be at least 3 characters")]
         [MaxLength(10, ErrorMessage = "Group cannot exceed 10 characters")]
         public string Group { get; set; }
-        public string File { get; set; }
+        public string ImagePath { get; set; }
     }
 }

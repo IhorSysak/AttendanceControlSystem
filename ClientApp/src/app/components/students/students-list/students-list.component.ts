@@ -29,4 +29,9 @@ export class StudentsListComponent implements OnInit {
   redirectToCreatingPage() : void {
     this.router.navigate(['students/add']);
   }
+
+  createImage(path: string) {
+    console.log(path);
+    return `https://localhost:7138/${path}`;
+  }
 }

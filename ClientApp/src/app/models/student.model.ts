@@ -3,5 +3,5 @@ export interface Student {
     fullName: string,
     course: number,
     group: string
-    file: string
+    imagePath: string
 }
