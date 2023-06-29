@@ -1,5 +1,6 @@
 ﻿using AttendanceControlSystem.Entity;
 using AttendanceControlSystem.Interfaces;
+using AttendanceControlSystem.Models.AuthModel;
 using AttendanceControlSystem.Models.UserModels;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
@@ -9,13 +10,13 @@ using Microsoft.IdentityModel.Tokens;
 using MongoDB.Driver;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class AuthController : ControllerBase
     {
         private readonly IConfiguration _configuration;
@@ -29,15 +30,16 @@ namespace AttendanceControlSystem.Controllers
             _userService = userService;
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserModel userModel)
         {
             var user = _mapper.Map<User>(userModel);
 
-            string passwordHash
-                = BCrypt.Net.BCrypt.HashPassword(userModel.Password);
+            CreatePasswordHash(userModel.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
             user.Role = RoleConstants.Teacher;
 
             try
@@ -55,6 +57,7 @@ namespace AttendanceControlSystem.Controllers
             return Ok(user);
         }
 
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult> Login(UserModel userModel)
         {
@@ -65,14 +68,94 @@ namespace AttendanceControlSystem.Controllers
                 return BadRequest("User not found.");
             }
 
-            if (!BCrypt.Net.BCrypt.Verify(userModel.Password, user.PasswordHash))
+            if (!VerifyPasswordHash(userModel.Password, user.PasswordHash, user.PasswordSalt))
             {
                 return BadRequest("Wrong password.");
             }
 
             string token = CreateToken(user);
 
+            var refreshToken = GenerateRefreshToken();
+            SetRefreshToken(refreshToken, user);
+
+            await _userService.UpdateAsync(user.Id, user);
+
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpPost("refresh-token")]
+        public async Task<ActionResult<string>> RefreshToken()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+
+            var userName = _userService.GetUser();
+            if (userName == null) 
+            {
+                return Unauthorized("User is unauthorized");
+            }
+            var user = await _userService.GetByUserNameAsync(userName);
+
+            if (!user.RefreshToken.Equals(refreshToken))
+            {
+                return Unauthorized("Invalid Refresh Token.");
+            }
+            else if (user.TokenExpires < DateTime.Now)
+            {
+                return Unauthorized("Token expired.");
+            }
+
+            string token = CreateToken(user);
+            var newRefreshToken = GenerateRefreshToken();
+            SetRefreshToken(newRefreshToken, user);
+
+            await _userService.UpdateAsync(user.Id, user);
+
+            return Ok(token);
+        }
+
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512())
+            {
+                passwordSalt = hmac.Key;
+                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+            }
+        }
+
+        private RefreshToken GenerateRefreshToken()
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Convert.ToBase64String(RandomNumberGenerator.GetBytes(64)),
+                Expires = DateTime.Now.AddDays(7),
+                Created = DateTime.Now
+            };
+
+            return refreshToken;
+        }
+
+        private void SetRefreshToken(RefreshToken newRefreshToken, User user)
+        {
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Expires = newRefreshToken.Expires
+            };
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, cookieOptions);
+
+            user.RefreshToken = newRefreshToken.Token;
+            user.TokenCreated = newRefreshToken.Created;
+            user.TokenExpires = newRefreshToken.Expires;
+        }
+
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        {
+            using (var hmac = new HMACSHA512(passwordSalt))
+            {
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                return computedHash.SequenceEqual(passwordHash);
+            }
         }
 
         private string CreateToken(User user)

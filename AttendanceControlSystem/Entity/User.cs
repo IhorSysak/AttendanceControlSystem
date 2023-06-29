@@ -11,7 +11,15 @@ namespace AttendanceControlSystem.Entity
         [BsonElement("userName")]
         public string UserName { get; set; } 
         [BsonElement("passwordHash")]
-        public string PasswordHash { get; set;}
+        public byte[] PasswordHash { get; set;}
+        [BsonElement("passwordSalt")]
+        public byte[] PasswordSalt { get; set; }
+        [BsonElement("refreshToken")]
+        public string RefreshToken { get; set; } = string.Empty;
+        [BsonElement("tokenCreated")]
+        public DateTime TokenCreated { get; set; }
+        [BsonElement("tokenExpires")]
+        public DateTime TokenExpires { get; set; }
         [BsonElement("role")]
         public string Role { get; set; }
     }
