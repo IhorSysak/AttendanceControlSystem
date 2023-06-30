@@ -2,7 +2,8 @@ import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
-import { StudentsService } from 'src/app/services/students.service';
+import { ImagesService } from 'src/app/services/images/images.service';
+import { StudentsService } from 'src/app/services/students/students.service';
 
 @Component({
   selector: 'app-edit-student',
@@ -20,7 +21,7 @@ export class EditStudentComponent implements OnInit {
 
   imagePath: string = '';
 
-  constructor(private activateRoute: ActivatedRoute, private studentService: StudentsService, private router: Router) { }
+  constructor(private activateRoute: ActivatedRoute, private studentService: StudentsService, private imagesService: ImagesService, private router: Router) { }
 
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe({
@@ -74,7 +75,7 @@ export class EditStudentComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
 
-    this.studentService.storeImage(formData)
+    this.imagesService.storeImage(formData)
       .subscribe({
         next: (event) => {
           if (event.type === HttpEventType.UploadProgress)

@@ -1,8 +1,8 @@
 import { HttpClient, HttpEvent } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment.development';
-import { Student } from '../models/student.model';
 import { Observable } from 'rxjs';
+import { Student } from 'src/app/models/student.model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,9 +31,5 @@ export class StudentsService {
 
   deleteStudent(id: string): Observable<string> {
     return this.http.delete<string>(this.baseApiUrl + '/api/Student/' + id);
-  }
-
-  storeImage(studentFormData: FormData): Observable<HttpEvent<Object>> {
-    return this.http.post(this.baseApiUrl + '/api/Upload', studentFormData, { reportProgress: true, observe: 'events' })
   }
 }
