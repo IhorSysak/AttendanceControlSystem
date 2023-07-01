@@ -1,0 +1,9 @@
+<div class="form-container">
+    <form #form="ngForm" class="form" (ngSubmit)="registerUser()">
+        <input type="text" placeholder="User name" class="form--input" name="userName" [(ngModel)]="user.userName" />
+        <input type="password" placeholder="Password" class="form--input" name="password" [(ngModel)]="user.password" />
+        <input type="password" placeholder="Confirm password" class="form--input" name="passwordConfirm" />
+        <a class="text--link" [routerLink]="['/login']">Already have an account?</a>
+        <button class="form--submit">Sign up</button>
+    </form>
+</div>

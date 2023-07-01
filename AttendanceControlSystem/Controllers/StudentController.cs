@@ -11,6 +11,7 @@ namespace AttendanceControlSystem.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Authorize(Roles = RoleConstants.Admin)]
+    [Authorize]
     public class StudentController : ControllerBase
     {
         private readonly IMapper _mapper;
