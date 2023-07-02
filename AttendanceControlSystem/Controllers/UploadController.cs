@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AttendanceControlSystem.Utility;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Net.Http.Headers;
 
 namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = RoleConstants.Admin)]
     public class UploadController : ControllerBase
     {
         [HttpPost, DisableRequestSizeLimit]

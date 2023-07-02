@@ -5,8 +5,8 @@ import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
   selector: 'app-logic',
-  templateUrl: './logic.component.html',
-  styleUrls: ['./logic.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LogicComponent implements OnInit {
   user: User = {

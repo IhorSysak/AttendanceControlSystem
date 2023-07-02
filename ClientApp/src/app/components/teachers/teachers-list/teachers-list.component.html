@@ -1,0 +1,24 @@
+<div class="container my-5">
+    <h1 class="mb-3">Teachers</h1>
+
+    <button type="submit" class="btn btn-success" style="float: right;" (click)="redirectToCreatingPage()">Create
+        teacher</button>
+
+    <table class="table" *ngIf="teachers && teachers.length > 0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>UserName</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let teacher of teachers">
+                <td>{{teacher.id}}</td>
+                <td>{{teacher.userName}}</td>
+                <td><button class="btn btn-danger" (click)="deleteTeacher(teacher.id)">Delete</button></td>
+            </tr>
+        </tbody>
+    </table>
+    <p *ngIf="!teachers || teachers.length <=0">No teachers found</p>
+</div>

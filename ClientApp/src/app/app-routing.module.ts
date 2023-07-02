@@ -4,7 +4,9 @@ import { StudentsListComponent } from './components/students/students-list/stude
 import { AddStudentComponent } from './components/students/add-student/add-student.component';
 import { EditStudentComponent } from './components/students/edit-student/edit-student.component';
 import { RegisterComponent } from './components/auth/register/register.component';
-import { LogicComponent } from './components/auth/logic/logic.component';
+import { LogicComponent } from './components/auth/login/login.component';
+import { TeachersListComponent } from './components/teachers/teachers-list/teachers-list.component';
+import { AddTeacherComponent } from './components/teachers/add-teacher/add-teacher.component';
 
 const routes: Routes = [
   {
@@ -30,6 +32,14 @@ const routes: Routes = [
   {
     path: 'students/edit/:id',
     component: EditStudentComponent
+  },
+  {
+    path: 'teachers',
+    component: TeachersListComponent
+  },
+  {
+    path: 'teacher/add',
+    component: AddTeacherComponent
   }
 ];
 
