@@ -487,3 +487,5 @@ $RECYCLE.BIN/
 .terraform
 *.hcl
 tf_sa_key
+/.vs/AttendanceControlSystem/DesignTimeBuild/.dtbcache.v2
+/.vs/AttendanceControlSystem/v17/.suo
