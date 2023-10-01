@@ -25,11 +25,8 @@ export class AppComponent implements DoCheck {
     if (token) {
       const decodedToken: any = jwt_decode(token);
       console.log('asda', decodedToken)
-      const body = JSON.stringify(decodedToken);
-      const object = JSON.parse(body);
 
-      const userRoles: string[] = decodedToken.roles;
-
+      const userRoles: string[] = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'];
       return userRoles.includes(role);
     }
 
