@@ -10,12 +10,10 @@ namespace AttendanceControlSystem.AutoMapperProfiles
         {
             CreateMap<AttendanceInfoModel, AttendanceInfo>()
                 .ForMember(a => a.Id, m => m.MapFrom(x => x.Id))
-                .ForMember(a => a.TimeIn, m => m.MapFrom(x => x.TimeIn))
-                .ForMember(a => a.TimeOut, m => m.MapFrom(x => x.TimeOut));
+                .ForMember(a => a.Time, m => m.MapFrom(x => x.Time));
 
             CreateMap<CreateAttendanceInfoModel, AttendanceInfo>()
-                .ForMember(a => a.TimeIn, m => m.MapFrom(x => x.TimeIn))
-                .ForMember(a => a.TimeOut, m => m.MapFrom(x => x.TimeOut))
+                .ForMember(a => a.Time, m => m.MapFrom(x => x.Time))
                 .ForPath(a => a.Student.Id, m => m.MapFrom(x => x.Student.Id))
                 .ForPath(a => a.Student.FullName, m => m.MapFrom(x => x.Student.FullName))
                 .ForPath(a => a.Student.Course, m => m.MapFrom(x => x.Student.Course))

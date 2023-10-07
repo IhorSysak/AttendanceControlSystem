@@ -1,0 +1,44 @@
+<div class="formbold-main-wrapper">
+    <div class="formbold-form-wrapper">
+      <form method="POST">
+        <div class="formbold-input-group">
+          <label for="course" class="formbold-form-label">Course</label>
+          <input type="text" name="course" id="course" placeholder="Enter the course" class="formbold-form-input"/>
+        </div>
+
+        <div class="formbold-input-group">
+          <label for="group" class="formbold-form-label">Group</label>
+          <input type="group" name="group" id="group" placeholder="Enter the group" class="formbold-form-input"
+          />
+        </div>
+  
+        <div class="formbold-input-group">
+          <label for="date" class="formbold-form-label">Date</label>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker" placeholder="Choose a date">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+          <input
+            type="datetime"
+            name="date"
+            id="date"
+            placeholder="Enter the date"
+            class="formbold-form-input"
+          />
+        </div>
+
+        <div class="formbold-input-group">
+          <label class="formbold-form-label">Which option best describes you?</label>
+          <select class="formbold-form-select" name="occupation" id="occupation">
+            <option value="Student">Student</option>
+            <option value="designer">UX/UI Designer</option>
+            <option value="fullstack">Full Stack Developer</option>
+            <option value="frontend">Front End Developer</option>
+          </select>
+        </div>
+  
+        <button class="formbold-btn">Submit</button>
+      </form>
+    </div>
+  </div>

@@ -1,7 +1,8 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Observable } from "rxjs";
+import { Observable, throwError } from "rxjs";
+import { catchError } from "rxjs/operators";
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -19,6 +20,19 @@ export class AuthInterceptor implements HttpInterceptor {
         else {
             this.router.navigate(['login']);
         }
-        return next.handle(req);
+        return next.handle(req).pipe(
+            catchError(
+                (err:HttpErrorResponse) => {
+                    console.log(err.status);
+                    if(err.status === 401) {
+                        console.log("You must be logged in");
+                    }
+                    else if(err.status === 403) {
+                        console.log("Forbidden");
+                    }
+                    return throwError("Something went wrong");
+                }
+            )
+        );
     }
 }

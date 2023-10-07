@@ -8,13 +8,15 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LogicComponent implements OnInit {
+export class LoginComponent implements OnInit {
   user: User = {
     userName: '',
     password: ''
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.authService.logout();
+   }
 
   constructor(private authService: AuthService, private router: Router) { }
 
