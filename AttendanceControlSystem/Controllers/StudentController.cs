@@ -30,9 +30,7 @@ namespace AttendanceControlSystem.Controllers
         {
             var student = await _studentService.GetByIdAsync(id);
             if (student == null)
-            {
                 throw new Exception($"There is no student with such id '{id}'");
-            }
 
             return Ok(student);
         }

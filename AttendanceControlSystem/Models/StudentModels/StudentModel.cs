@@ -7,6 +7,7 @@ namespace AttendanceControlSystem.Models.StudentModels
         public string Id { get; set; }
         [MinLength(2, ErrorMessage = "Full name must be at least 2 characters")]
         [MaxLength(50, ErrorMessage = "Full name cannot exceed 50 characters")]
+
         public string FullName { get; set; }
         [Range(1, 6, ErrorMessage = "Course must be between 1 and 6")]
         public int Course { get; set; }
