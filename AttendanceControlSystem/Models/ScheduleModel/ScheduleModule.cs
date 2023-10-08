@@ -13,20 +13,12 @@ namespace AttendanceControlSystem.Models.ScheduleModel
         [JsonPropertyName("groupCode")]
         public required string GroupCode { get; set; }
         [JsonPropertyName("scheduleFirstWeek")]
-        public required List<ScheduleFirstWeek> ScheduleFirstWeek { get; set; }
+        public required List<ScheduleWeek> ScheduleFirstWeek { get; set; }
         [JsonPropertyName("scheduleSecondWeek")]
-        public required List<ScheduleFirstWeek> ScheduleSecondWeek { get; set; }
+        public required List<ScheduleWeek> ScheduleSecondWeek { get; set; }
     }
 
-    public class ScheduleFirstWeek 
-    {
-        [JsonPropertyName("day")]
-        public required string Day { get; set; }
-        [JsonPropertyName("pairs")]
-        public required List<Pair> Pairs { get; set; }
-    }
-
-    public class ScheduleSecondWeek
+    public class ScheduleWeek
     {
         [JsonPropertyName("day")]
         public required string Day { get; set; }

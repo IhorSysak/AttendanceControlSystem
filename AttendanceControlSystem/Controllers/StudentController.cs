@@ -1,10 +1,13 @@
 ﻿using AttendanceControlSystem.Entity;
 using AttendanceControlSystem.Interfaces;
+using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.StudentModels;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
+using System.Xml.Linq;
 
 namespace AttendanceControlSystem.Controllers
 {
@@ -22,11 +25,11 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpGet]
-        public async Task<List<Student>> GetAll() =>
+        public async Task<List<Student>> GetAllAsync() =>
             await _studentService.GetAllStudentAsync();
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get([FromRoute] string id)
+        public async Task<IActionResult> GetAsync([FromRoute] string id)
         {
             var student = await _studentService.GetByIdAsync(id);
             if (student == null)
@@ -35,17 +38,27 @@ namespace AttendanceControlSystem.Controllers
             return Ok(student);
         }
 
+        [HttpGet("GetStundetByParameters")]
+        public async Task<IActionResult> FindStudentByParametesAsync([FromQuery] SearchStudentModel searchStudentModel)
+        {
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == searchStudentModel.FullName && i.Group == searchStudentModel.Group && i.Course == searchStudentModel.Course);
+            if (student == null)
+                throw new Exception("There is no student with such parameters");
+
+            return Ok(student);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateStudentModel createStudentModel) 
+        public async Task<IActionResult> CreateAsync([FromBody] CreateStudentModel createStudentModel)
         {
             var student = _mapper.Map<Student>(createStudentModel);
 
             await _studentService.CreateAsync(student);
-            return CreatedAtAction(nameof(GetAll), new { Id = student.Id }, student);
+            return CreatedAtAction(nameof(GetAllAsync), new { Id = student.Id }, student);
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] StudentModel studentModel)
+        public async Task<IActionResult> UpdateAsync([FromBody] StudentModel studentModel)
         {
             var student = _mapper.Map<Student>(studentModel);
             await _studentService.UpdateAsync(studentModel.Id, student);
@@ -53,7 +66,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
             await _studentService.RemoveAsync(id);
             return NoContent();

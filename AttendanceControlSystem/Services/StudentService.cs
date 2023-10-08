@@ -2,6 +2,7 @@
 using AttendanceControlSystem.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace AttendanceControlSystem.Services
 {
@@ -18,6 +19,9 @@ namespace AttendanceControlSystem.Services
 
         public async Task<List<Student>> GetAllStudentAsync() =>
             await _student.Find(new BsonDocument()).ToListAsync();
+
+        public async Task<Student> GetStudentByParametetsAsync(Expression<Func<Student, bool>> filterExpression) =>
+            await _student.Find(filterExpression).FirstOrDefaultAsync();
 
         public async Task CreateAsync(Student student) =>
             await _student.InsertOneAsync(student);

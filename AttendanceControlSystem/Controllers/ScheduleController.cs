@@ -1,6 +1,11 @@
-﻿using AttendanceControlSystem.Models.GroupModel;
+﻿using AttendanceControlSystem.Entity;
+using AttendanceControlSystem.Interfaces;
+using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.ScheduleModel;
+using AttendanceControlSystem.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 using System.Text.Json;
 
 namespace AttendanceControlSystem.Controllers
@@ -9,7 +14,15 @@ namespace AttendanceControlSystem.Controllers
     [ApiController]
     public class ScheduleController : ControllerBase
     {
+        private readonly IAttendanceInfoService _attendanceInfoService;
+        private readonly IStudentService _studentService;
         private readonly string URL = "https://schedule.kpi.ua/api/";
+
+        public ScheduleController(IAttendanceInfoService attendanceInfoService, IStudentService studentService)
+        {
+            _attendanceInfoService = attendanceInfoService;
+            _studentService = studentService;
+        }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] RequestScheduleModel requestScheduleModel)
@@ -31,9 +44,50 @@ namespace AttendanceControlSystem.Controllers
             if (scheduleJsonData == null)
                 return NoContent();
 
-            var currentTimeResponse = await client.GetStringAsync(URL + "time/current");
+            /*var currentTimeResponse = await client.GetStringAsync(URL + "time/current");*/
+
+            var isFirstEducationWeek = IsFirstWeek(requestScheduleModel.Date);
+            ScheduleWeek searchedSchedule = default;
+
+            if (isFirstEducationWeek)
+            {
+                searchedSchedule = scheduleJsonData.Data.ScheduleFirstWeek[(int)requestScheduleModel.Date.DayOfWeek - 1];
+            }
+            else 
+            {
+                searchedSchedule = scheduleJsonData.Data.ScheduleSecondWeek[(int)requestScheduleModel.Date.DayOfWeek - 1];
+            }
+
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
 
             return Ok();
+        }
+
+        private bool IsFirstWeek(DateTime checkDate) 
+        {
+            var currentDate = DateTime.Now;
+            var september1st = new DateTime(currentDate.Year, 09, 01);
+            var dayOfWeek = september1st.DayOfWeek;
+
+            DateTime startEducation;
+            if (dayOfWeek == DayOfWeek.Friday || dayOfWeek == DayOfWeek.Saturday || dayOfWeek == DayOfWeek.Sunday)
+            {
+                int daysUntilMonday = ((int)DayOfWeek.Monday - (int)dayOfWeek + 7) % 7;
+                startEducation = september1st.AddDays(daysUntilMonday);
+            }
+            else
+            {
+                startEducation = september1st;
+            }
+
+            int count = 0;
+            while (startEducation <= checkDate)
+            {
+                count++;
+                startEducation = startEducation.AddDays(7);
+            }
+            
+            return count % 2 != 0;
         }
     }
 }
