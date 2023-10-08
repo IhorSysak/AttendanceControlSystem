@@ -1,9 +1,6 @@
-﻿using AttendanceControlSystem.Entity;
-using AttendanceControlSystem.Interfaces;
+﻿using AttendanceControlSystem.Interfaces;
 using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.ScheduleModel;
-using AttendanceControlSystem.Services;
-using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Text.Json;
@@ -59,11 +56,12 @@ namespace AttendanceControlSystem.Controllers
             }
 
             var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
+            var (startDate, endTime) = CalculatingTimePeriod(requestScheduleModel.Date, searchedSchedule.Pairs.FirstOrDefault().Time);
 
             return Ok();
         }
 
-        private bool IsFirstWeek(DateTime checkDate) 
+        private static bool IsFirstWeek(DateTime checkDate) 
         {
             var currentDate = DateTime.Now;
             var september1st = new DateTime(currentDate.Year, 09, 01);
@@ -88,6 +86,19 @@ namespace AttendanceControlSystem.Controllers
             }
             
             return count % 2 != 0;
+        }
+
+        private static (DateTime startTime, DateTime endTime) CalculatingTimePeriod(DateTime inputTime, string time) 
+        {
+            var parts = time.Split('.');
+            var hourses = int.Parse(parts[0]);
+            var minutes = int.Parse(parts[1]);
+
+            DateTime startDateTime = new DateTime(inputTime.Year, inputTime.Month, inputTime.Day, hourses, minutes, 0);
+
+            var endDateTime = startDateTime.AddHours(1).AddMinutes(35);
+
+            return (startDateTime, endDateTime);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using AttendanceControlSystem.Entity;
 using AttendanceControlSystem.Interfaces;
 using AttendanceControlSystem.Models.AttendanceInfoModels;
+using AttendanceControlSystem.Models.StudentModels;
+using AttendanceControlSystem.Services;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -35,6 +37,19 @@ namespace AttendanceControlSystem.Controllers
             {
                 throw new Exception($"There is no attendanceInfo with such id '{id}'");
             }
+
+            return Ok(attendanceInfo);
+        }
+
+        [HttpGet]
+        [Route("GetAttendanceInfoByParameters")]
+        public async Task<IActionResult> FindAttendanceInfoByParametesAsync([FromQuery] SearchAttendanceInfoModel searchAttendanceInfoModel)
+        {
+            var attendanceInfo = await _attendanceInfoService.GetAttendanceInfoByParametetsAsync(i => i.Student.Id == searchAttendanceInfoModel.StudentId 
+                && i.Time >= searchAttendanceInfoModel.TimeStart 
+                && i.Time <= searchAttendanceInfoModel.TimeEnd);
+            if (attendanceInfo == null)
+                throw new Exception("There is no attendance info with such parameters");
 
             return Ok(attendanceInfo);
         }
