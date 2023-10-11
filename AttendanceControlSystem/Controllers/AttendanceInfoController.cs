@@ -1,8 +1,6 @@
 ﻿using AttendanceControlSystem.Entity;
 using AttendanceControlSystem.Interfaces;
 using AttendanceControlSystem.Models.AttendanceInfoModels;
-using AttendanceControlSystem.Models.StudentModels;
-using AttendanceControlSystem.Services;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;

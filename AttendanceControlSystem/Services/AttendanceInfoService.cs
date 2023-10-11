@@ -20,8 +20,8 @@ namespace AttendanceControlSystem.Services
         public async Task<List<AttendanceInfo>> GetAllAttendanceInfoAsync() =>
             await _attendanceInfo.Find(new BsonDocument()).ToListAsync();
 
-        public async Task<AttendanceInfo> GetAttendanceInfoByParametetsAsync(Expression<Func<AttendanceInfo, bool>> filterExpression) =>
-            await _attendanceInfo.Find(filterExpression).FirstOrDefaultAsync();
+        public async Task<List<AttendanceInfo>> GetAttendanceInfoByParametetsAsync(Expression<Func<AttendanceInfo, bool>> filterExpression) =>
+            await _attendanceInfo.Find(filterExpression).ToListAsync();
 
         public async Task CreateAsync(AttendanceInfo attendanceInfo) =>
             await _attendanceInfo.InsertOneAsync(attendanceInfo);

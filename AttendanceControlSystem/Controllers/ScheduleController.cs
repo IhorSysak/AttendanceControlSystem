@@ -24,7 +24,11 @@ namespace AttendanceControlSystem.Controllers
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] RequestScheduleModel requestScheduleModel)
         {
-            HttpClient client = new HttpClient();
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
+            if (student == null) 
+                throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.FullName}', group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
+
+            using var client = new HttpClient();
 
             var groupResponse = await client.GetStringAsync(URL + "schedule/groups");
             var groupsJsonData = JsonSerializer.Deserialize<GroupModel>(groupResponse);
@@ -34,7 +38,7 @@ namespace AttendanceControlSystem.Controllers
             var groupId = groupsJsonData.Data.FirstOrDefault(x => x.Name == requestScheduleModel.Group).Id;
             Guid groupIdGuid = Guid.Empty;
             if(!Guid.TryParse(groupId, out groupIdGuid))
-                throw new Exception($"There is group with such name '{requestScheduleModel.Group}'");
+                throw new Exception($"There is no group with such name '{requestScheduleModel.Group}'");
 
             var scheduleResponse = await client.GetStringAsync($"{URL}schedule/lessons?groupId={groupId}");
             var scheduleJsonData = JsonSerializer.Deserialize<ScheduleModule>(scheduleResponse);
@@ -55,10 +59,27 @@ namespace AttendanceControlSystem.Controllers
                 searchedSchedule = scheduleJsonData.Data.ScheduleSecondWeek[(int)requestScheduleModel.Date.DayOfWeek - 1];
             }
 
-            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
-            var (startDate, endTime) = CalculatingTimePeriod(requestScheduleModel.Date, searchedSchedule.Pairs.FirstOrDefault().Time);
+            var scheduleData = new ResponseScheduleModel
+            {
+                DayOfWeek = searchedSchedule.Day
+            };
 
-            return Ok();
+            foreach (var pair in searchedSchedule.Pairs) 
+            {
+                var (startDate, endTime) = CalculatingTimePeriod(requestScheduleModel.Date, pair.Time);
+                var attendanceInfos = await _attendanceInfoService.GetAttendanceInfoByParametetsAsync(i => i.Time >= startDate && i.Time <= endTime && i.Student.Id == student.Id);
+
+                var scheduleInfo = new ScheduleInfo
+                {
+                    IsPresent = attendanceInfos.Count != 0,
+                    Subject = pair,
+                    Snapshots = attendanceInfos
+                };
+
+                scheduleData.ScheduleInfos.Add(scheduleInfo);
+            }
+
+            return Ok(scheduleData);
         }
 
         private static bool IsFirstWeek(DateTime checkDate) 
@@ -94,7 +115,7 @@ namespace AttendanceControlSystem.Controllers
             var hourses = int.Parse(parts[0]);
             var minutes = int.Parse(parts[1]);
 
-            DateTime startDateTime = new DateTime(inputTime.Year, inputTime.Month, inputTime.Day, hourses, minutes, 0);
+            DateTime startDateTime = new DateTime(inputTime.Year, inputTime.Month, inputTime.Day, hourses, minutes, 0, DateTimeKind.Utc);
 
             var endDateTime = startDateTime.AddHours(1).AddMinutes(35);
 
