@@ -3,7 +3,7 @@
       <form method="POST" (ngSubmit)="this.getSchedule()">
         <div class="formbold-input-group">
           <label for="course" class="formbold-form-label">Course</label>
-          <select class="formbold-form-select" name="course" id="course" [(ngModel)]="schedule.course">
+          <select class="formbold-form-select" name="course" id="course" [(ngModel)]="scheduleRequest.course">
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
@@ -15,13 +15,13 @@
 
         <div class="formbold-input-group">
           <label for="group" class="formbold-form-label">Group</label>
-          <input type="group" name="group" id="group" placeholder="Enter the group" class="formbold-form-input" [(ngModel)]="schedule.group"/>
+          <input type="group" name="group" id="group" placeholder="Enter the group" class="formbold-form-input" [(ngModel)]="scheduleRequest.group"/>
         </div>
   
         <div class="formbold-input-group">
           <label for="date" class="formbold-form-label">Date</label>
           <mat-form-field>
-            <input name="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="schedule.date">
+            <input name="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="scheduleRequest.date">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
           </mat-form-field>
@@ -29,7 +29,7 @@
 
         <div class="formbold-input-group">
           <label class="formbold-form-label">Student</label>
-          <input type="student" name="student" id="student" placeholder="Enter the Student" class="formbold-form-input" [(ngModel)]="schedule.fullName"/>
+          <input type="student" name="student" id="student" placeholder="Enter the Student" class="formbold-form-input" [(ngModel)]="scheduleRequest.fullName"/>
         </div>
   
         <button class="formbold-btn" type="submit">Submit</button>

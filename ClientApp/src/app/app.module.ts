@@ -20,6 +20,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
+import { ScheduleComponent } from './components/schedule/schedule.component';
+import { SnapshotComponent } from './components/snapshot/snapshot.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     AddTeacherComponent,
     HeaderComponent,
     ForbiddenComponent,
-    AttendanceTrackingComponent
+    AttendanceTrackingComponent,
+    ScheduleComponent,
+    SnapshotComponent
   ],
   imports: [
     BrowserModule,

@@ -21,12 +21,16 @@ namespace AttendanceControlSystem.Controllers
             _studentService = studentService;
         }
 
-        [HttpGet]
+        [HttpGet("GetSchedule")]
         public async Task<IActionResult> Get([FromQuery] RequestScheduleModel requestScheduleModel)
         {
             var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
             if (student == null) 
                 throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.FullName}', group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
+
+            var dayOfWeek = requestScheduleModel.Date.DayOfWeek;
+            if (dayOfWeek == DayOfWeek.Sunday)
+                throw new Exception("There is no schedule in sunday");
 
             using var client = new HttpClient();
 
@@ -45,18 +49,16 @@ namespace AttendanceControlSystem.Controllers
             if (scheduleJsonData == null)
                 return NoContent();
 
-            /*var currentTimeResponse = await client.GetStringAsync(URL + "time/current");*/
-
             var isFirstEducationWeek = IsFirstWeek(requestScheduleModel.Date);
             ScheduleWeek searchedSchedule = default;
 
             if (isFirstEducationWeek)
             {
-                searchedSchedule = scheduleJsonData.Data.ScheduleFirstWeek[(int)requestScheduleModel.Date.DayOfWeek - 1];
+                searchedSchedule = scheduleJsonData.Data.ScheduleFirstWeek[(int)dayOfWeek - 1];
             }
             else 
             {
-                searchedSchedule = scheduleJsonData.Data.ScheduleSecondWeek[(int)requestScheduleModel.Date.DayOfWeek - 1];
+                searchedSchedule = scheduleJsonData.Data.ScheduleSecondWeek[(int)dayOfWeek - 1];
             }
 
             var scheduleData = new ResponseScheduleModel
@@ -78,6 +80,8 @@ namespace AttendanceControlSystem.Controllers
 
                 scheduleData.ScheduleInfos.Add(scheduleInfo);
             }
+
+            scheduleData.ScheduleInfos = scheduleData.ScheduleInfos.OrderBy(info => info.Subject.Time).ToList();
 
             return Ok(scheduleData);
         }

@@ -1,0 +1,37 @@
+<div class="idance" style="margin-top:20px;">
+    <div class="schedule content-block">
+        <div class="container">
+        
+            <div class="timetable" *ngIf="scheduleResponse && scheduleResponse.scheduleInfos.length > 0">
+              <nav class="nav nav-tabs">
+                <a class="nav-link active">{{this.dayOfWeek}}</a>
+              </nav>
+
+              <div class="tab-content">
+                <div class="tab-pane show active">
+                  <div class="row">
+
+                    <div class="col-md-6" *ngFor="let item of scheduleResponse.scheduleInfos">
+                      <div class="timetable-item">
+                        <div class="timetable-item-main">
+                          <div class="timetable-item-time">{{item.subject.name}}</div>
+                          <div class="timetable-item-name">{{item.subject.time}} - {{item.subject.teacherName}}</div>
+                          <a class="btn btn-primary btn-book" [ngClass]="{'disabled': item.snapshots.length === 0}" (click)="this.redirectToScheduleDetailsPage(item)">{{ item.snapshots.length === 0 ? 'Absent' : 'Take a look' }}</a>
+                          <div class="timetable-item-like">
+                            <i class="fa fa-heart-o" aria-hidden="true"></i>
+                            <i class="fa fa-heart" aria-hidden="true"></i>
+                            <div class="timetable-item-like-count">{{item.subject.tag}}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <p *ngIf="!scheduleResponse || scheduleResponse.scheduleInfos.length == 0">No schedule found</p>
+          </div>
+      </div>
+  </div>

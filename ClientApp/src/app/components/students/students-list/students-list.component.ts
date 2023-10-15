@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
 import { StudentsService } from 'src/app/services/students/students.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-students-list',
@@ -11,6 +12,7 @@ import { StudentsService } from 'src/app/services/students/students.service';
 export class StudentsListComponent implements OnInit {
 
   students: Student[] = [];
+  baseApiUrl: string = environment.baseApiUrl;
   constructor(private studentService: StudentsService, private router: Router) { }
 
   ngOnInit(): void {
@@ -32,6 +34,6 @@ export class StudentsListComponent implements OnInit {
 
   createImage(path: string) {
     console.log(path);
-    return `https://localhost:7138/${path}`;
+    return `${this.baseApiUrl}/${path}`;
   }
 }

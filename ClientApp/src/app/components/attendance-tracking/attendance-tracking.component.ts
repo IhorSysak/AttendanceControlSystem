@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import { Schedule } from 'src/app/models/schedule.model';
+import { Router } from '@angular/router';
+import { ScheduleRequest } from 'src/app/models/scheduleRequest.model';
+import { ScheduleService } from 'src/app/services/schedule/schedule.service';
 
 @Component({
   selector: 'app-attendance-tracking',
@@ -8,7 +10,7 @@ import { Schedule } from 'src/app/models/schedule.model';
   styleUrls: ['./attendance-tracking.component.css']
 })
 export class AttendanceTrackingComponent implements OnInit {
-  schedule: Schedule = {
+  scheduleRequest: ScheduleRequest = {
     course: 1,
     fullName: '',
     group: '',
@@ -17,9 +19,16 @@ export class AttendanceTrackingComponent implements OnInit {
 
   ngOnInit(): void { }
   
-  constructor() {}
+  constructor(private scheduleService: ScheduleService, private router: Router) {}
 
-  getSchedule(): void {
-    console.log(this.schedule);
+  getSchedule() {
+    this.scheduleService.getSchedule(this.scheduleRequest).subscribe({
+      next: (data) => {
+        this.router.navigate(['/schedule', { scheduleData: JSON.stringify(data) }])
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
   }
 }

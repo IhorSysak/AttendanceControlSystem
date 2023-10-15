@@ -1,4 +1,4 @@
-export interface Schedule {
+export interface ScheduleRequest {
     course: number,
     fullName: string,
     group: string
