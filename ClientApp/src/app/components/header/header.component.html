@@ -15,6 +15,9 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" routerLink="attendanceTracking" *ngIf="this.authService.roleMatch(['Admin'])">Check Student</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link active" aria-current="page" routerLink="journal" *ngIf="this.authService.roleMatch(['Admin'])">Journal</a>
+          </li>
         </ul>
       </div>
       <div class="collapse navbar-collapse justify-content-end">

@@ -7,6 +7,7 @@ export interface ScheduleInfo {
     isPresent: boolean;
     subject: Subject;
     snapshots: Snapshots[];
+    totalTimePresence: string;
 }
 
 export interface Subject {
@@ -22,7 +23,7 @@ export interface Subject {
 export interface Snapshots {
     id: string;
     time: string;
-    student: StudentInfo[];
+    student: StudentInfo;
 }
 
 export interface StudentInfo {

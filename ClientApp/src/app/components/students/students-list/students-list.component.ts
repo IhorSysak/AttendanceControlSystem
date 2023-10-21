@@ -33,7 +33,6 @@ export class StudentsListComponent implements OnInit {
   }
 
   createImage(path: string) {
-    console.log(path);
     return `${this.baseApiUrl}/${path}`;
   }
 }

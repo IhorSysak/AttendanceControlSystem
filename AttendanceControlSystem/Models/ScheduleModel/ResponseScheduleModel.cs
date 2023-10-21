@@ -13,5 +13,6 @@ namespace AttendanceControlSystem.Models.ScheduleModel
         public bool IsPresent { get; set; }
         public Pair Subject { get; set; }
         public List<AttendanceInfo> Snapshots { get; set; }
+        public TimeSpan TotalTimePresence { get; set; }
     }
 }

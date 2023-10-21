@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ScheduleInfo } from 'src/app/models/scheduleResponse.module';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-snapshot',
@@ -10,6 +11,9 @@ import { ScheduleInfo } from 'src/app/models/scheduleResponse.module';
 export class SnapshotComponent {
 
   scheduleInfo: ScheduleInfo | undefined;
+  baseApiUrl: string = environment.baseApiUrl;
+  imageUrlToShow: string = '';
+  imagePreviewOpen: boolean = false;
 
   constructor(private route: ActivatedRoute, private router: Router) {}
 
@@ -25,4 +29,17 @@ export class SnapshotComponent {
       }
     });
   };
+
+  createImage(path: string) {
+    return `${this.baseApiUrl}/${path}`;
+  }
+
+  openImagePreview(imagePath: string) {
+    this.imageUrlToShow = this.createImage(imagePath);
+    this.imagePreviewOpen = true;
+  }
+
+  closeImagePreview() {
+    this.imagePreviewOpen = false;
+  }
 }

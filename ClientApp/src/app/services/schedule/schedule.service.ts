@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ScheduleRequest } from 'src/app/models/scheduleRequest.model';
 import { ScheduleResponse } from 'src/app/models/scheduleResponse.module';
+import { SubjectRequest } from 'src/app/models/subjectRequest.model';
+import { SubjectResponse } from 'src/app/models/subjectResponse.module';
 import { environment } from 'src/environments/environment.development';
 
 @Injectable({
@@ -21,6 +23,13 @@ export class ScheduleService {
       .set('group', getScheduleRequest.group)
       .set('date', getScheduleRequest.date.toLocaleString());
     return this.http.get<ScheduleResponse>(this.baseApiUrl + '/api/Schedule/GetSchedule', {params});
+  }
+
+  getSubject(getSubjectRequest: SubjectRequest): Observable<SubjectResponse[]> {
+    const params = new HttpParams()
+      .set('group', getSubjectRequest.group)
+      .set('date', getSubjectRequest.date.toLocaleString());
+    return this.http.get<SubjectResponse[]>(this.baseApiUrl + '/api/Schedule/GetSubject', {params});
   }
 
 }

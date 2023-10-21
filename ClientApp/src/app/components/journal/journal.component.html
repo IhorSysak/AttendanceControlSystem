@@ -1,0 +1,45 @@
+<div class="formbold-main-wrapper">
+    <div class="formbold-form-wrapper">
+      <form method="POST" (ngSubmit)="this.getJournal()">
+        <div class="formbold-input-group">
+          <label for="course" class="formbold-form-label">Course</label>
+          <select class="formbold-form-select" name="course" id="course" [(ngModel)]="journalRequest.course">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </div>
+
+        <div class="formbold-input-group">
+          <label for="group" class="formbold-form-label">Group</label>
+          <input type="group" name="group" id="group" placeholder="Enter the group" class="formbold-form-input" [(ngModel)]="subjectRequest.group" [(ngModel)]="journalRequest.group" (ngModelChange)="(this.getSubjects())"/>
+        </div>
+  
+        <div class="formbold-input-group">
+          <label for="date" class="formbold-form-label">Date</label>
+          <mat-form-field>
+            <input name="date" matInput [matDatepicker]="picker" placeholder="Choose a date" [(ngModel)]="subjectRequest.date" [(ngModel)]="journalRequest.date" (ngModelChange)="(this.getSubjects())">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </div>
+
+        <div class="formbold-input-group">
+            <label class="formbold-form-label">Subject</label>
+            <mat-form-field style="width: 490px !important;">
+                <mat-label>Select</mat-label>
+                <mat-select name="subject" [(ngModel)]="journalRequest.subject">
+                  <mat-option *ngFor="let subject of subjects" [value]="this.subject">
+                    {{ this.subject.name }}
+                  </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+  
+        <button class="formbold-btn" type="submit">Submit</button>
+      </form>
+    </div>
+  </div>

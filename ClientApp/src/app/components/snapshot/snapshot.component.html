@@ -1,1 +1,41 @@
-<p>snapshot works!</p>
+<div class="idance" style="margin-top:20px;">
+  <div class="schedule content-block">
+      <div class="container">
+      
+          <div class="timetable" *ngIf="scheduleInfo && scheduleInfo.snapshots.length > 0">
+            <nav class="nav nav-tabs">
+              <a class="nav-link active">{{this.scheduleInfo.subject.name}} <br> {{this.scheduleInfo.subject.teacherName}}</a>
+            </nav>
+
+            <h2 style="margin-top: 10px;">Total time of presence: {{ this.scheduleInfo.totalTimePresence }}</h2>
+
+            <div class="tab-content">
+              <div class="tab-pane show active">
+                <div class="row">
+                  <div class="col-md-6" *ngFor="let item of scheduleInfo.snapshots">
+                    <div class="timetable-item">
+                      <div class="timetable-item-img" (click)="openImagePreview(item.student.imagePath)">
+                        <img [src]="this.createImage(item.student.imagePath)" alt="profile picture">
+                      </div>
+                      <div class="timetable-item-main">
+                        <div class="timetable-item-time">{{ item.student.fullName }} - {{ item.student.group }}</div>
+                        <div class="timetable-item-name">{{ item.time | date:'yyyy-MM-dd HH:mm':'UTC' }}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <p *ngIf="!scheduleInfo || scheduleInfo.snapshots.length == 0">No snapshots found</p>
+        </div>
+    </div>
+</div>
+
+<div class="image-preview" *ngIf="imagePreviewOpen" (click)="this.closeImagePreview()">
+  <div class="preview-content">
+    <img [src]="imageUrlToShow" alt="profile picture">
+  </div>
+</div>

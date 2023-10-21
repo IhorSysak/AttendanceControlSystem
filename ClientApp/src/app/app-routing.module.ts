@@ -12,6 +12,8 @@ import { ForbiddenComponent } from './components/forbidden/forbidden.component';
 import { AttendanceTrackingComponent } from './components/attendance-tracking/attendance-tracking.component';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { SnapshotComponent } from './components/snapshot/snapshot.component';
+import { JournalComponent } from './components/journal/journal.component';
+import { ExportComponent } from './components/export/export.component';
 
 const routes: Routes = [
   { path: '', component: LoginComponent },
@@ -25,7 +27,9 @@ const routes: Routes = [
   { path: 'forbidden', component: ForbiddenComponent },
   { path: 'attendanceTracking', component: AttendanceTrackingComponent },
   { path: 'schedule', component: ScheduleComponent },
-  { path: 'snapshot', component: SnapshotComponent }
+  { path: 'snapshot', component: SnapshotComponent },
+  { path: 'journal', component: JournalComponent },
+  { path: 'export', component: ExportComponent }
 ];
 
 @NgModule({
