@@ -19,12 +19,13 @@ import { AttendanceTrackingComponent } from './components/attendance-tracking/at
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDatepickerModule } from '@angular/material/datepicker'
 import { MatInputModule } from '@angular/material/input';
-import { MatNativeDateModule, MatOptionSelectionChange } from '@angular/material/core';
+import { MatNativeDateModule } from '@angular/material/core';
 import { ScheduleComponent } from './components/schedule/schedule.component';
 import { SnapshotComponent } from './components/snapshot/snapshot.component';
 import { JournalComponent } from './components/journal/journal.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ExportComponent } from './components/export/export.component';
+import {MatTableModule} from '@angular/material/table'
 
 @NgModule({
   declarations: [
@@ -53,7 +54,8 @@ import { ExportComponent } from './components/export/export.component';
     MatDatepickerModule,
     MatInputModule,
     MatNativeDateModule,
-    MatSelectModule 
+    MatSelectModule,
+    MatTableModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

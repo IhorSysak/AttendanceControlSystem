@@ -1,1 +1,31 @@
-<p>export works!</p>
+<div class="headerView">
+    <div class="headerElement">
+        <h2>{{ this.jornalResponse.subjectName }}</h2>
+        <span>{{ this.jornalResponse.group }} - course {{ this.jornalResponse.course }}</span>
+    </div>
+    <div class="headerElement">
+        <button type="submit" class="btn btn-success" (click)="this.exportToExcel()">Export to Excel</button>
+    </div>
+</div>
+<div class="tableView">
+    <table mat-table [dataSource]="this.jornalResponse.studentPresenceInfos" class="mat-elevation-z8 demo-table">
+
+        <ng-container matColumnDef="position">
+          <th mat-header-cell *matHeaderCellDef> No. </th>
+          <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        </ng-container>
+      
+        <ng-container matColumnDef="isPresent">
+          <th mat-header-cell *matHeaderCellDef> Present </th>
+          <td mat-cell *matCellDef="let element"> {{element.isPresent}} </td>
+        </ng-container>
+      
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+</div>  

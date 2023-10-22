@@ -1,0 +1,26 @@
+table {
+    width: 100%; 
+}
+
+.tableView {
+    height: fit-content;
+    margin-top: 20px;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+.headerView {
+    margin-right: 15px;
+    margin-left: 15px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.headerElement {
+    margin-top: 20px;
+}
+
+.headerView button {
+    margin-bottom: 10px;
+    float: right;
+}

@@ -23,6 +23,9 @@ namespace AttendanceControlSystem.Services
         public async Task<Student> GetStudentByParametetsAsync(Expression<Func<Student, bool>> filterExpression) =>
             await _student.Find(filterExpression).FirstOrDefaultAsync();
 
+        public async Task<List<Student>> GetStudentsByParametetsAsync(Expression<Func<Student, bool>> filterExpression) =>
+           await _student.Find(filterExpression).ToListAsync();
+
         public async Task CreateAsync(Student student) =>
             await _student.InsertOneAsync(student);
 

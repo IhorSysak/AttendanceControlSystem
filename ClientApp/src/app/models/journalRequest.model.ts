@@ -6,6 +6,6 @@ export interface JournalRequest {
 }
 
 export interface SubjectModel {
-    name: string,
-    time: string
+    subjectName: string,
+    timeStart: string
 }

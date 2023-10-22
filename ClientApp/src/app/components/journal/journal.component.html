@@ -33,7 +33,7 @@
                 <mat-label>Select</mat-label>
                 <mat-select name="subject" [(ngModel)]="journalRequest.subject">
                   <mat-option *ngFor="let subject of subjects" [value]="this.subject">
-                    {{ this.subject.name }}
+                    {{ this.subject.subjectName }}
                   </mat-option>
                 </mat-select>
             </mat-form-field>

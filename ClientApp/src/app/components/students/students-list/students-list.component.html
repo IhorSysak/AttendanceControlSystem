@@ -1,4 +1,4 @@
-<div class="container my-5">
+<!-- <div class="container my-5">
     <h1 class="mb-3">Students</h1>
 
     <button type="submit" class="btn btn-success" style="float: right;" (click)="this.redirectToCreatingPage()">Create Student</button>
@@ -26,5 +26,25 @@
             </tr>
         </tbody>
     </table>
+    <p *ngIf="!students || students.length <=0">No students found</p>
+</div> -->
+
+<div class="container my-5">
+    <h1 class="mb-3">Students</h1>
+    <div class="contacts" *ngIf="students && students.length > 0">
+        <div class="contact-card" *ngFor="let student of students" [routerLink]="['edit', student.id]">
+            <img [src]="this.createImage(student.imagePath)" alt="profile picture" />
+            <h3>{{ student.fullName }}</h3>
+    
+            <div class="info-group">
+                <p>Course {{ student.course }} - {{student.group}}</p>
+            </div>
+    
+            <div class="info-group">
+                <p>props.item.email</p>
+            </div>
+        </div>
+    </div>
+
     <p *ngIf="!students || students.length <=0">No students found</p>
 </div>

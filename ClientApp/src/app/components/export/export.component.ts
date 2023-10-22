@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JournalRequest } from 'src/app/models/journalRequest.model';
+import { JournalResponse } from 'src/app/models/journalResponse.model';
+import { ScheduleService } from 'src/app/services/schedule/schedule.service';
+import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-export',
@@ -9,17 +12,26 @@ import { JournalRequest } from 'src/app/models/journalRequest.model';
 })
 export class ExportComponent {
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
+  constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private router: Router) {}
+
+  displayedColumns: string[] = ['position', 'name', 'isPresent'];
 
   journalRequest: JournalRequest = {
     course: 0,
     group: '',
     date: new Date(),
-    subject: 
+    subject:
     { 
-      name: '', 
-      time: '' 
+      subjectName: '', 
+      timeStart: '' 
     }
+  };
+
+  jornalResponse: JournalResponse = {
+    course: 0,
+    group: '',
+    subjectName: '',
+    studentPresenceInfos: []
   };
 
   ngOnInit() {
@@ -27,11 +39,36 @@ export class ExportComponent {
       const subjectData = params.get('subjectData');
       if(subjectData) {
         this.journalRequest = JSON.parse(subjectData);
-        console.log(this.journalRequest);
       }
       else {
         this.router.navigate(['journal']);
       }
+
+      this.scheduleService.getJournal(this.journalRequest).subscribe({
+        next: (data) => {
+          this.jornalResponse = data;
+          console.log(this.jornalResponse);
+        },
+        error: (response) => {
+          console.log(response);
+        }
+      });
     });
    }
+
+  exportToExcel(): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.jornalResponse.studentPresenceInfos);
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+
+    const columnWidths = [
+      { wch: 8 },
+      { wch: 20 },
+      { wch: 8 },
+    ];
+
+    ws['!cols'] = columnWidths;
+
+    XLSX.utils.book_append_sheet(wb, ws, `${this.jornalResponse.group}`);
+    XLSX.writeFile(wb, `Присутність_${this.jornalResponse.group}.xlsx`);
+  }
 }

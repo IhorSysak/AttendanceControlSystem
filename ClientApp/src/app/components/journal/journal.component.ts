@@ -18,13 +18,13 @@ export class JournalComponent {
   }
 
   journalRequest: JournalRequest = {
-    course: 0,
+    course: 1,
     group: '',
     date: new Date(),
     subject: 
     { 
-      name: '', 
-      time: '' 
+      subjectName: '', 
+      timeStart: '' 
     }
   };
 
@@ -49,7 +49,10 @@ export class JournalComponent {
   }
 
   getJournal() {
-    console.log(this.journalRequest);
-    this.router.navigate(['/export', { subjectData: JSON.stringify(this.journalRequest) }])
+    const dataToPass = {
+      ...this.journalRequest,
+      date: this.journalRequest.date.toLocaleString()
+    };
+    this.router.navigate(['/export', { subjectData: JSON.stringify(dataToPass) }])
   }
 }

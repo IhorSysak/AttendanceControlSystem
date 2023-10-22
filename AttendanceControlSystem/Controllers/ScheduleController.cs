@@ -1,9 +1,9 @@
 ﻿using AttendanceControlSystem.Interfaces;
 using AttendanceControlSystem.Models.GroupModel;
+using AttendanceControlSystem.Models.JournalModels;
 using AttendanceControlSystem.Models.ScheduleModel;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
-using System.Linq;
 using System.Text.Json;
 
 namespace AttendanceControlSystem.Controllers
@@ -141,11 +141,45 @@ namespace AttendanceControlSystem.Controllers
 
             var subjectsData = searchedSchedule.Pairs.Select(subject => new ResponseSubjectModel
             {
-                Name = $"{subject.Name} - {subject.Tag}",
+                SubjectName = $"{subject.Name} - {subject.Tag}",
                 TimeStart = subject.Time
             });
 
             return Ok(subjectsData);
+        }
+
+        [HttpGet("GetJournal")]
+        public async Task<IActionResult> Get([FromQuery] RequestJournalModel requestJournalModel)
+        {
+            var students = await _studentService.GetStudentsByParametetsAsync(i => i.Group == requestJournalModel.Group && i.Course == requestJournalModel.Course);
+            if (students == null)
+                throw new Exception($"There is no students with the following parameters course: '{requestJournalModel.Course}' and group: '{requestJournalModel.Group}'");
+
+            var (startTime, endTime) = CalculatingTimePeriod(requestJournalModel.Date, requestJournalModel.TimeStart);
+
+            var responseJournalModel = new ResponseJournalModel
+            {
+                Course = requestJournalModel.Course,
+                Group = requestJournalModel.Group,
+                SubjectName = requestJournalModel.SubjectName
+            };
+
+            int position = 1;
+            foreach (var student in students.OrderBy(x => x.FullName)) 
+            {
+                var attendanceInfos = await _attendanceInfoService.GetAttendanceInfoByParametetsAsync(i => i.Time >= startTime && i.Time <= endTime && i.Student.Id == student.Id);
+
+                var studentPresenceInfo = new StudentPresenceInfo
+                {
+                    Name = student.FullName,
+                    IsPresent = attendanceInfos != null,
+                    Position = position++
+                };
+
+                responseJournalModel.StudentPresenceInfos.Add(studentPresenceInfo);
+            }
+
+            return Ok(responseJournalModel);
         }
 
         private static bool IsFirstWeek(DateTime checkDate) 

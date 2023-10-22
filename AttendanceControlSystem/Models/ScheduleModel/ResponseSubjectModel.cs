@@ -2,7 +2,7 @@
 {
     public class ResponseSubjectModel
     {
-        public string Name { get; set; }
+        public string SubjectName { get; set; }
         public string TimeStart { get; set; }
 
     }

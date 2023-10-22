@@ -1,4 +1,4 @@
 export interface SubjectResponse {
-    name: string
+    subjectName: string
     timeStart: string
 }
