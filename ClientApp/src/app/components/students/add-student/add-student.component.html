@@ -16,10 +16,14 @@
                     <label for="group" class="form-label">Group</label>
                     <input type="text" class="form-control" id="group" name="group" [(ngModel)]="addStudentRequest.group">
                 </div>
-                <div class="mb-3">
+                <div class="image-upload-container">
                     <label for="file" class="form-label">File</label>
-                    <input type="file" class="form-control" id="file" name="file" (change)="uploadFile($event)">
+                    <div class="image-preview" (click)="this.openFileInput()">
+                      <img [src]="this.createImage(this.imagePath)" alt="profile picture" />
+                    </div>
+                    <input type="file" style="display: none;" class="file-form-control" id="file" name="file" (change)="uploadFile($event)">
                 </div>
+                <br>
                 <button type="submit" class="btn btn-primary">Create</button>
             </form>
         </div>

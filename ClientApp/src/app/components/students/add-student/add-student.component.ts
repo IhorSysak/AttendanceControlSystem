@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
 import { ImagesService } from 'src/app/services/images/images.service';
 import { StudentsService } from 'src/app/services/students/students.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-add-student',
@@ -19,6 +20,7 @@ export class AddStudentComponent implements OnInit {
     imagePath: ''
   };
 
+  baseApiUrl: string = environment.baseApiUrl;
   imagePath: string = '';
 
   constructor(private studentService: StudentsService, private imagesService: ImagesService, private router: Router) { }
@@ -64,5 +66,17 @@ export class AddStudentComponent implements OnInit {
         },
         error: (err: HttpErrorResponse) => console.log(err)
       });
+  }
+
+  createImage(path: string) {
+    if(path === '') {
+      return;
+    }
+    return `${this.baseApiUrl}/${path}`;
+  }
+
+  openFileInput(): void {
+    const fileInput = document.getElementById('file') as HTMLInputElement;
+    fileInput.click();
   }
 }

@@ -54,7 +54,7 @@ namespace AttendanceControlSystem.Controllers
             var student = _mapper.Map<Student>(createStudentModel);
 
             await _studentService.CreateAsync(student);
-            return CreatedAtAction(nameof(GetAllAsync), new { Id = student.Id }, student);
+            return Ok(student);
         }
 
         [HttpPut]

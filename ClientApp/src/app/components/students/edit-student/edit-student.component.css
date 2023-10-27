@@ -1,0 +1,21 @@
+  .image-upload-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .image-preview {
+    border: 2px solid #ccc;
+    border-radius: 10%;
+    width: 150px;
+    height: 150px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .image-preview img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+  

@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
 import { ImagesService } from 'src/app/services/images/images.service';
 import { StudentsService } from 'src/app/services/students/students.service';
+import { environment } from 'src/environments/environment.development';
 
 @Component({
   selector: 'app-edit-student',
@@ -11,6 +12,9 @@ import { StudentsService } from 'src/app/services/students/students.service';
   styleUrls: ['./edit-student.component.css']
 })
 export class EditStudentComponent implements OnInit {
+
+  baseApiUrl: string = environment.baseApiUrl;
+
   studentDetails: Student = {
     id: '',
     fullName: '',
@@ -86,9 +90,22 @@ export class EditStudentComponent implements OnInit {
             const body = JSON.stringify(event.body);
             const data = JSON.parse(body);
             this.imagePath = data.dbPath;
+            this.studentDetails.imagePath = data.dbPath;
           }
         },
         error: (err: HttpErrorResponse) => console.log(err)
       });
+  }
+
+  createImage(path: string) {
+    if(path === '') {
+      return;
+    }
+    return `${this.baseApiUrl}/${path}`;
+  }
+
+  openFileInput(): void {
+    const fileInput = document.getElementById('file') as HTMLInputElement;
+    fileInput.click();
   }
 }

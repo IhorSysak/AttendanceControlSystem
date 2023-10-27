@@ -1,36 +1,8 @@
-<!-- <div class="container my-5">
-    <h1 class="mb-3">Students</h1>
-
-    <button type="submit" class="btn btn-success" style="float: right;" (click)="this.redirectToCreatingPage()">Create Student</button>
-
-    <table class="table" *ngIf="students && students.length > 0">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Full Name</th>
-                <th>Course</th>
-                <th>Group</th>
-                <th>File</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let student of students">
-                <td>{{student.id}}</td>
-                <td>{{student.fullName}}</td>
-                <td>{{student.course}}</td>
-                <td>{{student.group}}</td>
-                <td><img [src]="this.createImage(student.imagePath)" alt="profile picture" style="width:100px; height:100px;">
-                </td>
-                <td><a [routerLink]="['edit', student.id]">Edit</a></td>
-            </tr>
-        </tbody>
-    </table>
-    <p *ngIf="!students || students.length <=0">No students found</p>
-</div> -->
-
 <div class="container my-5">
-    <h1 class="mb-3">Students</h1>
+    <div style="margin-bottom: 15px;">
+        <button type="submit" class="btn btn-success" style="float: right;" (click)="this.redirectToCreatingPage()">Create Student</button>
+        <h1 class="mb-3">Students</h1>
+    </div>
     <div class="contacts" *ngIf="students && students.length > 0">
         <div class="contact-card" *ngFor="let student of students" [routerLink]="['edit', student.id]">
             <img [src]="this.createImage(student.imagePath)" alt="profile picture" />
