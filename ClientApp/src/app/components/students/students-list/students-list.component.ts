@@ -20,6 +20,7 @@ export class StudentsListComponent implements OnInit {
       .subscribe({
         next: (students) => {
           this.students = students;
+          console.log(students);
         },
         error: (response) => {
           console.log(response);

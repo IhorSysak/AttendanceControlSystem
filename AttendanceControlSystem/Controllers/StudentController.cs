@@ -1,13 +1,10 @@
 ﻿using AttendanceControlSystem.Entity;
 using AttendanceControlSystem.Interfaces;
-using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.StudentModels;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MongoDB.Driver;
-using System.Xml.Linq;
 
 namespace AttendanceControlSystem.Controllers
 {
@@ -68,7 +65,28 @@ namespace AttendanceControlSystem.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
+            var student = await _studentService.GetByIdAsync(id);
+            if (student == null)
+                return NotFound($"There is no student with such id '{id}'");
+
             await _studentService.RemoveAsync(id);
+
+            if (System.IO.File.Exists(student.ImagePath))
+            {
+                try
+                {
+                    System.IO.File.Delete(student.ImagePath);
+                }
+                catch
+                {
+                    throw new Exception("Removing photo failed");
+                }
+            }
+            else 
+            {
+                throw new Exception("Current photo does not exist");
+            }
+
             return NoContent();
         }
     }

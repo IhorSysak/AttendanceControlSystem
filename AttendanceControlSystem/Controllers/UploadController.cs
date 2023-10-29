@@ -1,6 +1,8 @@
 ﻿using AttendanceControlSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
+using System.Net;
 using System.Net.Http.Headers;
 
 namespace AttendanceControlSystem.Controllers
@@ -11,7 +13,7 @@ namespace AttendanceControlSystem.Controllers
     public class UploadController : ControllerBase
     {
         [HttpPost, DisableRequestSizeLimit]
-        public async Task<IActionResult> Upload() 
+        public async Task<IActionResult> UploadAsync() 
         {
             try
             {
@@ -43,6 +45,35 @@ namespace AttendanceControlSystem.Controllers
             {
                 return StatusCode(500, $"Internal server error: {ex}");
             }
+        }
+
+        [HttpDelete("{*imagePath}")]
+        public async Task<IActionResult> DeleteAsync(string imagePath)
+        {
+            if (imagePath.IsNullOrEmpty())
+                throw new Exception("Image was not found");
+
+            var urlPart = imagePath.Split("Delete/");
+
+            string decodedPath = WebUtility.UrlDecode(urlPart[1]);
+
+            if (System.IO.File.Exists(decodedPath))
+            {
+                try
+                {
+                    System.IO.File.Delete(decodedPath);
+                }
+                catch
+                {
+                    throw new Exception("Removing photo failed");
+                }
+            }
+            else
+            {
+                throw new Exception("Current photo does not exist");
+            }
+
+            return NoContent();
         }
     }
 }

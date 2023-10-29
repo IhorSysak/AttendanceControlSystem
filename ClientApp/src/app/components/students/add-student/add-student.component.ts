@@ -25,7 +25,7 @@ export class AddStudentComponent implements OnInit {
   };
 
   baseApiUrl: string = environment.baseApiUrl;
-  imagePath: string = '';
+  //imagePath: string = '';
 
   constructor(private studentService: StudentsService, private imagesService: ImagesService, private router: Router, private toastr: ToastrService) { }
 
@@ -33,7 +33,7 @@ export class AddStudentComponent implements OnInit {
 
   addStudent() {
     console.log(this.addStudentRequest);
-    this.addStudentRequest.imagePath = this.imagePath;
+    //this.addStudentRequest.imagePath = this.imagePath;
     this.studentService.createStudent(this.addStudentRequest)
       .subscribe({
         next: (response) => {
@@ -51,8 +51,20 @@ export class AddStudentComponent implements OnInit {
     if (files.length === 0) {
       return;
     }
-    let fileToUpload: File = files[0];
 
+    if(this.addStudentRequest.imagePath !== '') {
+      this.imagesService.deleteImage(this.addStudentRequest.imagePath)
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (response) => {
+            console.log(response);
+          }
+        });
+    }
+
+    let fileToUpload: File = files[0];
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
 
@@ -66,7 +78,7 @@ export class AddStudentComponent implements OnInit {
 
             const body = JSON.stringify(event.body);
             const data = JSON.parse(body);
-            this.imagePath = data.dbPath;
+            this.addStudentRequest.imagePath = data.dbPath;
           }
         },
         error: (err: HttpErrorResponse) => console.log(err)

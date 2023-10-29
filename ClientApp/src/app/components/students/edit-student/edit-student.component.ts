@@ -27,15 +27,19 @@ export class EditStudentComponent implements OnInit {
     imagePath: ''
   };
 
-  imagePath: string = '';
+  previosImagePath: string = '';
 
-  constructor(private activateRoute: ActivatedRoute, private studentService: StudentsService, private imagesService: ImagesService, private router: Router, private toastr: ToastrService) { }
+  constructor(
+    private activateRoute: ActivatedRoute,
+    private studentService: StudentsService, 
+    private imagesService: ImagesService, 
+    private router: Router, 
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe({
       next: (params) => {
         const id = params.get('id');
-
         if (id) {
           this.studentService.getStudent(id)
             .subscribe({
@@ -53,9 +57,6 @@ export class EditStudentComponent implements OnInit {
   }
 
   updateStudent() {
-    if(this.imagePath != '') {
-      this.studentDetails.imagePath = this.imagePath;
-    }
     this.studentService.editStudent(this.studentDetails)
       .subscribe({
         next: (response) => {
@@ -86,11 +87,21 @@ export class EditStudentComponent implements OnInit {
     if (files.length === 0) {
       return;
     }
-    let fileToUpload: File = files[0];
 
+    this.imagesService.deleteImage(this.studentDetails.imagePath)
+        .subscribe({
+          next: (response) => {
+            console.log(response);
+          },
+          error: (response) => {
+            console.log(response);
+          }
+        });
+
+    let fileToUpload: File = files[0];
     const formData = new FormData();
     formData.append('file', fileToUpload, fileToUpload.name);
-
+    
     this.imagesService.storeImage(formData)
       .subscribe({
         next: (event) => {
@@ -101,7 +112,6 @@ export class EditStudentComponent implements OnInit {
 
             const body = JSON.stringify(event.body);
             const data = JSON.parse(body);
-            this.imagePath = data.dbPath;
             this.studentDetails.imagePath = data.dbPath;
           }
         },

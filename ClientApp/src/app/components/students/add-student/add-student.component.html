@@ -34,7 +34,7 @@
                 <div class="image-upload-container">
                     <label for="file" class="form-label">File</label>
                     <div class="image-preview" (click)="this.openFileInput()">
-                      <img [src]="this.createImage(this.imagePath)" alt="profile picture" />
+                      <img [src]="this.createImage(this.addStudentRequest.imagePath)" alt="profile picture" />
                     </div>
                     <input type="file" style="display: none;" class="file-form-control" id="file" name="file" (change)="uploadFile($event)">
                 </div>

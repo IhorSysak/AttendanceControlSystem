@@ -2,7 +2,6 @@
 using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.JournalModels;
 using AttendanceControlSystem.Models.ScheduleModel;
-using AttendanceControlSystem.Models.StudentModels;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Text.Json;
@@ -26,12 +25,6 @@ namespace AttendanceControlSystem.Controllers
         [HttpGet("GetSchedule")]
         public async Task<IActionResult> Get([FromQuery] RequestScheduleModel requestScheduleModel)
         {
-            var student = await _studentService.GetStudentByParametetsAsync(i => i.FirstName == requestScheduleModel.FirstName && i.LastName == requestScheduleModel.LastName && i.MiddleName == requestScheduleModel.MiddleName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
-            if (student == null)
-                throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.LastName} {requestScheduleModel.FirstName} {requestScheduleModel.MiddleName}' , group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
-            var dayOfWeek = requestScheduleModel.Date.DayOfWeek;
-            if (dayOfWeek == DayOfWeek.Sunday)
-                throw new Exception("There is no schedule in sunday");
             using var client = new HttpClient();
 
             var groupResponse = await client.GetStringAsync(URL + "schedule/groups");
@@ -49,6 +42,13 @@ namespace AttendanceControlSystem.Controllers
                 throw new Exception($"There is no group with such name '{requestScheduleModel.Group}'");
             }
 
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FirstName == requestScheduleModel.FirstName && i.LastName == requestScheduleModel.LastName && i.MiddleName == requestScheduleModel.MiddleName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
+            if (student == null)
+                throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.LastName} {requestScheduleModel.FirstName} {requestScheduleModel.MiddleName}' , group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
+            var dayOfWeek = requestScheduleModel.Date.DayOfWeek;
+            if (dayOfWeek == DayOfWeek.Sunday)
+                throw new Exception("There is no schedule in sunday");
+            
             var scheduleResponse = await client.GetStringAsync($"{URL}schedule/lessons?groupId={groupId}");
             var scheduleJsonData = JsonSerializer.Deserialize<ScheduleModule>(scheduleResponse);
             if (scheduleJsonData == null)
