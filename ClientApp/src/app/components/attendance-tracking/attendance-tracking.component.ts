@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {MatDatepickerModule} from '@angular/material/datepicker';
 import { Router } from '@angular/router';
 import { ScheduleRequest } from 'src/app/models/scheduleRequest.model';
 import { ScheduleService } from 'src/app/services/schedule/schedule.service';
@@ -12,7 +11,9 @@ import { ScheduleService } from 'src/app/services/schedule/schedule.service';
 export class AttendanceTrackingComponent implements OnInit {
   scheduleRequest: ScheduleRequest = {
     course: 1,
-    fullName: '',
+    firstName: '',
+    lastName: '',
+    middleName: '',
     group: '',
     date: new Date()
   }

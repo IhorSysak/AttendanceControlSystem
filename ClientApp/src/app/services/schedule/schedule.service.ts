@@ -21,7 +21,9 @@ export class ScheduleService {
   getSchedule(getScheduleRequest: ScheduleRequest): Observable<ScheduleResponse> {
     const params = new HttpParams()
       .set('course', getScheduleRequest.course.toString())
-      .set('fullName', getScheduleRequest.fullName)
+      .set('firstName', getScheduleRequest.firstName)
+      .set('lastName', getScheduleRequest.lastName)
+      .set('middleName', getScheduleRequest.middleName)
       .set('group', getScheduleRequest.group)
       .set('date', getScheduleRequest.date.toLocaleString());
     return this.http.get<ScheduleResponse>(this.baseApiUrl + '/api/Schedule/GetSchedule', {params});

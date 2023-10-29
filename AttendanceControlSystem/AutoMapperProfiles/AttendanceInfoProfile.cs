@@ -15,7 +15,9 @@ namespace AttendanceControlSystem.AutoMapperProfiles
             CreateMap<CreateAttendanceInfoModel, AttendanceInfo>()
                 .ForMember(a => a.Time, m => m.MapFrom(x => x.Time))
                 .ForPath(a => a.Student.Id, m => m.MapFrom(x => x.Student.Id))
-                .ForPath(a => a.Student.FullName, m => m.MapFrom(x => x.Student.FullName))
+                .ForPath(a => a.Student.FirstName, m => m.MapFrom(x => x.Student.FirstName))
+                .ForPath(a => a.Student.LastName, m => m.MapFrom(x => x.Student.LastName))
+                .ForPath(a => a.Student.MiddleName, m => m.MapFrom(x => x.Student.MiddleName))
                 .ForPath(a => a.Student.Course, m => m.MapFrom(x => x.Student.Course))
                 .ForPath(a => a.Student.Group, m => m.MapFrom(x => x.Student.Group))
                 .ForPath(a => a.Student.ImagePath, m => m.MapFrom(x => x.Student.ImagePath));

@@ -28,7 +28,9 @@ export interface Snapshots {
 
 export interface StudentInfo {
     id: string;
-    fullName: string;
+    firstName: string;
+    lastName: string;
+    middleName: string;
     course: number;
     group: string;
     imagePath: string; 

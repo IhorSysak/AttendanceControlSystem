@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Student } from 'src/app/models/student.model';
 import { ImagesService } from 'src/app/services/images/images.service';
 import { StudentsService } from 'src/app/services/students/students.service';
@@ -17,15 +18,18 @@ export class EditStudentComponent implements OnInit {
 
   studentDetails: Student = {
     id: '',
-    fullName: '',
+    firstName: '',
+    lastName: '',
+    middleName: '',
     course: 0,
     group: '',
+    email: '',
     imagePath: ''
   };
 
   imagePath: string = '';
 
-  constructor(private activateRoute: ActivatedRoute, private studentService: StudentsService, private imagesService: ImagesService, private router: Router) { }
+  constructor(private activateRoute: ActivatedRoute, private studentService: StudentsService, private imagesService: ImagesService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.activateRoute.paramMap.subscribe({
@@ -37,6 +41,10 @@ export class EditStudentComponent implements OnInit {
             .subscribe({
               next: (response) => {
                 this.studentDetails = response;
+                console.log(this.studentDetails);
+              },
+              error: (response) => {
+                console.log(response);
               }
             })
         }
@@ -45,10 +53,13 @@ export class EditStudentComponent implements OnInit {
   }
 
   updateStudent() {
-    this.studentDetails.imagePath = this.imagePath;
+    if(this.imagePath != '') {
+      this.studentDetails.imagePath = this.imagePath;
+    }
     this.studentService.editStudent(this.studentDetails)
       .subscribe({
         next: (response) => {
+          this.toastr.success('The student was successfully updated');
           this.router.navigate(['students']);
         },
         error: (response) => {
@@ -61,6 +72,7 @@ export class EditStudentComponent implements OnInit {
     this.studentService.deleteStudent(id)
       .subscribe({
         next: (response) => {
+          this.toastr.warning('The student was successfully removed');
           this.router.navigate(['students']);
         },
         error: (response) => {

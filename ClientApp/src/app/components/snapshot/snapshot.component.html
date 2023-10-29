@@ -18,7 +18,7 @@
                         <img [src]="this.createImage(item.student.imagePath)" alt="profile picture">
                       </div>
                       <div class="timetable-item-main">
-                        <div class="timetable-item-time">{{ item.student.fullName }} - {{ item.student.group }}</div>
+                        <div class="timetable-item-time">{{ item.student.lastName }} {{ item.student.firstName }} {{ item.student.middleName }} - {{ item.student.group }}</div>
                         <div class="timetable-item-name">{{ item.time | date:'yyyy-MM-dd HH:mm':'UTC' }}</div>
                       </div>
                     </div>

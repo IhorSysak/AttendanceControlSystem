@@ -13,8 +13,14 @@ namespace AttendanceControlSystem.Models.GroupModel
         
         public DateTime Date { get; set; }
 
-        [MinLength(2, ErrorMessage = "Full name must be at least 2 characters")]
-        [MaxLength(50, ErrorMessage = "Full name cannot exceed 50 characters")]
-        public string FullName { get; set; }
+        [MinLength(2, ErrorMessage = "First name must be at least 2 characters")]
+        [MaxLength(50, ErrorMessage = "First name cannot exceed 50 characters")]
+        public string FirstName { get; set; }
+        [MinLength(2, ErrorMessage = "Last name must be at least 2 characters")]
+        [MaxLength(50, ErrorMessage = "Last name cannot exceed 50 characters")]
+        public string LastName { get; set; }
+        [MinLength(2, ErrorMessage = "Middle name must be at least 2 characters")]
+        [MaxLength(50, ErrorMessage = "Middle name cannot exceed 50 characters")]
+        public string MiddleName { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace AttendanceControlSystem.Controllers
         {
             var student = await _studentService.GetByIdAsync(id);
             if (student == null)
-                throw new Exception($"There is no student with such id '{id}'");
+                return NotFound($"There is no student with such id '{id}'");
 
             return Ok(student);
         }
@@ -41,7 +41,7 @@ namespace AttendanceControlSystem.Controllers
         [HttpGet("GetStundetByParameters")]
         public async Task<IActionResult> FindStudentByParametesAsync([FromQuery] SearchStudentModel searchStudentModel)
         {
-            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == searchStudentModel.FullName && i.Group == searchStudentModel.Group && i.Course == searchStudentModel.Course);
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FirstName == searchStudentModel.FirstName && i.LastName == searchStudentModel.LastName && i.MiddleName == searchStudentModel.MiddleName && i.Group == searchStudentModel.Group && i.Course == searchStudentModel.Course);
             if (student == null)
                 throw new Exception("There is no student with such parameters");
 

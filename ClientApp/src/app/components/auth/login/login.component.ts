@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
@@ -18,13 +19,12 @@ export class LoginComponent implements OnInit {
     this.authService.logout();
    }
 
-  constructor(private authService: AuthService, private router: Router) { }
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) { }
 
   loginUser() {
     this.authService.login(this.user)
       .subscribe({
         next: (response) => {
-          console.log('login', response);
           localStorage.setItem('authToken', response);
           this.router.navigate(['students']);
         },

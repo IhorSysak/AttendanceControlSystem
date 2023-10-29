@@ -6,6 +6,8 @@ export interface JournalResponse {
 }
 
 export interface StudentPresenceInfo {
-    name: string,
+    lastName: string,
+    firstName: string,
+    middleName: string,
     isPresent: boolean
 }

@@ -1,7 +1,6 @@
 ﻿using AttendanceControlSystem.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Net.Http.Headers;
 
 namespace AttendanceControlSystem.Controllers
@@ -37,7 +36,7 @@ namespace AttendanceControlSystem.Controllers
                 }
                 else 
                 {
-                    return BadRequest();
+                    throw new Exception("The photo was not received");
                 }
             }
             catch(Exception ex)

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { StudentsListComponent } from './components/students/students-list/students-list.component';
@@ -25,7 +24,8 @@ import { SnapshotComponent } from './components/snapshot/snapshot.component';
 import { JournalComponent } from './components/journal/journal.component';
 import { MatSelectModule } from '@angular/material/select';
 import { ExportComponent } from './components/export/export.component';
-import {MatTableModule} from '@angular/material/table'
+import { MatTableModule } from '@angular/material/table'
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [
@@ -55,7 +55,13 @@ import {MatTableModule} from '@angular/material/table'
     MatInputModule,
     MatNativeDateModule,
     MatSelectModule,
-    MatTableModule
+    MatTableModule,
+    ToastrModule.forRoot({
+      tapToDismiss: true,
+      newestOnTop: true,
+      timeOut: 3000,
+      easeTime: 300
+    })
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

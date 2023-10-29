@@ -1,6 +1,8 @@
 export interface ScheduleRequest {
     course: number,
-    fullName: string,
+    firstName: string,
+    lastName: string,
+    middleName: string,
     group: string
     date: Date
 }

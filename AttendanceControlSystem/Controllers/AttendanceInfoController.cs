@@ -32,9 +32,7 @@ namespace AttendanceControlSystem.Controllers
         {
             var attendanceInfo = await _attendanceInfoService.GetByIdAsync(id);
             if (attendanceInfo == null)
-            {
                 throw new Exception($"There is no attendanceInfo with such id '{id}'");
-            }
 
             return Ok(attendanceInfo);
         }

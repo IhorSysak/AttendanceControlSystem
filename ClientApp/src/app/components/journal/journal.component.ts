@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { JournalRequest } from 'src/app/models/journalRequest.model';
 import { SubjectRequest } from 'src/app/models/subjectRequest.model';
 import { SubjectResponse } from 'src/app/models/subjectResponse.module';
@@ -32,7 +33,7 @@ export class JournalComponent {
 
   ngOnInit(): void { }
   
-  constructor(private scheduleService: ScheduleService, private router: Router) {}
+  constructor(private scheduleService: ScheduleService, private router: Router, private toastr: ToastrService) {}
 
   getSubjects() {
     if(this.subjectRequest.group === '') {
@@ -41,6 +42,7 @@ export class JournalComponent {
     this.scheduleService.getSubject(this.subjectRequest).subscribe({
       next: (data) => {
         this.subjects = data;
+        this.toastr.info('The schedule has been successfully retrived');
       },
       error: (response) => {
         console.log(response);

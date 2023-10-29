@@ -14,7 +14,7 @@ export class ExportComponent {
 
   constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private router: Router) {}
 
-  displayedColumns: string[] = ['position', 'name', 'isPresent'];
+  displayedColumns: string[] = ['position', 'lastName', 'firstName', 'middleName', 'isPresent'];
 
   journalRequest: JournalRequest = {
     course: 0,
@@ -62,6 +62,8 @@ export class ExportComponent {
 
     const columnWidths = [
       { wch: 8 },
+      { wch: 15 },
+      { wch: 15 },
       { wch: 20 },
       { wch: 8 },
     ];

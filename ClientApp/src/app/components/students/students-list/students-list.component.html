@@ -6,14 +6,14 @@
     <div class="contacts" *ngIf="students && students.length > 0">
         <div class="contact-card" *ngFor="let student of students" [routerLink]="['edit', student.id]">
             <img [src]="this.createImage(student.imagePath)" alt="profile picture" />
-            <h3>{{ student.fullName }}</h3>
+            <h3>{{ student.lastName }} {{ student.firstName }} {{ student.middleName }}</h3>
     
             <div class="info-group">
                 <p>Course {{ student.course }} - {{student.group}}</p>
             </div>
     
             <div class="info-group">
-                <p>props.item.email</p>
+                <p> {{ student.email }}</p>
             </div>
         </div>
     </div>

@@ -28,8 +28,18 @@
         </div>
 
         <div class="formbold-input-group">
-          <label class="formbold-form-label">Student</label>
-          <input type="student" name="student" id="student" placeholder="Enter the Student" class="formbold-form-input" [(ngModel)]="scheduleRequest.fullName"/>
+          <label class="formbold-form-label">First Name</label>
+          <input type="firstName" name="firstName" id="firstName" placeholder="Enter the first name" class="formbold-form-input" [(ngModel)]="scheduleRequest.firstName"/>
+        </div>
+
+        <div class="formbold-input-group">
+          <label class="formbold-form-label">Last Name</label>
+          <input type="lastName" name="lastName" id="lastName" placeholder="Enter the last name" class="formbold-form-input" [(ngModel)]="scheduleRequest.lastName"/>
+        </div>
+
+        <div class="formbold-input-group">
+          <label class="formbold-form-label">Middle Name</label>
+          <input type="middleName" name="middleName" id="middleName" placeholder="Enter the middle name" class="formbold-form-input" [(ngModel)]="scheduleRequest.middleName"/>
         </div>
   
         <button class="formbold-btn" type="submit">Submit</button>

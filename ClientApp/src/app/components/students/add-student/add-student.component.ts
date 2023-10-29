@@ -1,6 +1,7 @@
 import { HttpErrorResponse, HttpEventType } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Student } from 'src/app/models/student.model';
 import { ImagesService } from 'src/app/services/images/images.service';
 import { StudentsService } from 'src/app/services/students/students.service';
@@ -14,16 +15,19 @@ import { environment } from 'src/environments/environment.development';
 export class AddStudentComponent implements OnInit {
   addStudentRequest: Student = {
     id: '',
-    fullName: '',
+    firstName: '',
+    lastName: '',
+    middleName: '',
     course: 1,
     group: '',
+    email: '',
     imagePath: ''
   };
 
   baseApiUrl: string = environment.baseApiUrl;
   imagePath: string = '';
 
-  constructor(private studentService: StudentsService, private imagesService: ImagesService, private router: Router) { }
+  constructor(private studentService: StudentsService, private imagesService: ImagesService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void { }
 
@@ -34,6 +38,7 @@ export class AddStudentComponent implements OnInit {
       .subscribe({
         next: (response) => {
           this.router.navigate(['students']);
+          this.toastr.success('The student was successfully added');
         },
         error: (error) => {
           console.log(error);

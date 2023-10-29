@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Teachers } from 'src/app/models/teacher.model';
 import { TeachersService } from 'src/app/services/teachers/teachers.service';
 
@@ -11,13 +12,12 @@ import { TeachersService } from 'src/app/services/teachers/teachers.service';
 export class TeachersListComponent implements OnInit {
   teachers: Teachers[] = [];
 
-  constructor(private teacherService: TeachersService, private router: Router) { }
+  constructor(private teacherService: TeachersService, private router: Router, private toastr: ToastrService) { }
 
   ngOnInit(): void {
     this.teacherService.getAllTeachers()
       .subscribe({
         next: (teachers) => {
-          console.log(teachers);
           this.teachers = teachers;
         },
         error: (response) => {
@@ -30,10 +30,12 @@ export class TeachersListComponent implements OnInit {
     this.teacherService.deleteTeacher(id)
       .subscribe({
         next: (response) => {
+          console.log(response);
           const index = this.teachers.findIndex(t => t.id === id);
           if(index) {
             this.teachers.splice(index, 1);
           }
+          this.toastr.warning('The teacher was successfully removed');
         },
         error: (response) => {
           console.log(response);

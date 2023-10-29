@@ -2,6 +2,7 @@
 using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.JournalModels;
 using AttendanceControlSystem.Models.ScheduleModel;
+using AttendanceControlSystem.Models.StudentModels;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Text.Json;
@@ -25,30 +26,33 @@ namespace AttendanceControlSystem.Controllers
         [HttpGet("GetSchedule")]
         public async Task<IActionResult> Get([FromQuery] RequestScheduleModel requestScheduleModel)
         {
-            var student = await _studentService.GetStudentByParametetsAsync(i => i.FullName == requestScheduleModel.FullName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
+            var student = await _studentService.GetStudentByParametetsAsync(i => i.FirstName == requestScheduleModel.FirstName && i.LastName == requestScheduleModel.LastName && i.MiddleName == requestScheduleModel.MiddleName && i.Group == requestScheduleModel.Group && i.Course == requestScheduleModel.Course);
             if (student == null)
-                throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.FullName}', group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
-
+                throw new Exception($"There is no student with the following parameters full name: '{requestScheduleModel.LastName} {requestScheduleModel.FirstName} {requestScheduleModel.MiddleName}' , group: '{requestScheduleModel.Group}' and course: '{requestScheduleModel.Course}'");
             var dayOfWeek = requestScheduleModel.Date.DayOfWeek;
             if (dayOfWeek == DayOfWeek.Sunday)
                 throw new Exception("There is no schedule in sunday");
-
             using var client = new HttpClient();
 
             var groupResponse = await client.GetStringAsync(URL + "schedule/groups");
             var groupsJsonData = JsonSerializer.Deserialize<GroupModel>(groupResponse);
             if (groupsJsonData == null)
-                return NoContent();
+                throw new Exception("No groups were found");
 
-            var groupId = groupsJsonData.Data.FirstOrDefault(x => x.Name == requestScheduleModel.Group).Id;
-            Guid groupIdGuid = Guid.Empty;
-            if (!Guid.TryParse(groupId, out groupIdGuid))
+            string groupId = string.Empty;
+            try
+            {
+                groupId = groupsJsonData.Data.FirstOrDefault(x => x.Name == requestScheduleModel.Group).Id;
+            }
+            catch
+            {
                 throw new Exception($"There is no group with such name '{requestScheduleModel.Group}'");
+            }
 
             var scheduleResponse = await client.GetStringAsync($"{URL}schedule/lessons?groupId={groupId}");
             var scheduleJsonData = JsonSerializer.Deserialize<ScheduleModule>(scheduleResponse);
             if (scheduleJsonData == null)
-                return NoContent();
+                throw new Exception("No schedule were found");
 
             var isFirstEducationWeek = IsFirstWeek(requestScheduleModel.Date);
             ScheduleWeek searchedSchedule = default;
@@ -72,20 +76,23 @@ namespace AttendanceControlSystem.Controllers
                 var (startTime, endTime) = CalculatingTimePeriod(requestScheduleModel.Date, pair.Time);
                 var attendanceInfos = await _attendanceInfoService.GetAttendanceInfoByParametetsAsync(i => i.Time >= startTime && i.Time <= endTime && i.Student.Id == student.Id);
 
-                var timestamps = attendanceInfos.Select(info => info.Time).Order().ToList();
-
                 TimeSpan totalTimeInClass = TimeSpan.Zero;
 
-                var fistTimeStamp = timestamps.FirstOrDefault();
-                var lastTimeStamp = timestamps.LastOrDefault();
+                if (attendanceInfos.Count != 0) 
+                {
+                    var timestamps = attendanceInfos.Select(info => info.Time).Order().ToList();
 
-                if (fistTimeStamp < startTime)
-                    fistTimeStamp = startTime;
+                    var fistTimeStamp = timestamps.FirstOrDefault();
+                    var lastTimeStamp = timestamps.LastOrDefault();
 
-                if (lastTimeStamp > endTime)
-                    lastTimeStamp = endTime;
+                    if (fistTimeStamp < startTime)
+                        fistTimeStamp = startTime;
 
-                totalTimeInClass += lastTimeStamp - fistTimeStamp;
+                    if (lastTimeStamp > endTime)
+                        lastTimeStamp = endTime;
+
+                    totalTimeInClass += lastTimeStamp - fistTimeStamp;
+                }
 
                 var scheduleInfo = new ScheduleInfo
                 {
@@ -98,7 +105,7 @@ namespace AttendanceControlSystem.Controllers
                 scheduleData.ScheduleInfos.Add(scheduleInfo);
             }
 
-            scheduleData.ScheduleInfos = scheduleData.ScheduleInfos.OrderBy(info => info.Subject.Time).ToList();
+            scheduleData.ScheduleInfos = scheduleData.ScheduleInfos.OrderBy(info => DateTime.ParseExact(info.Subject.Time, "H.mm" , null)).ToList();
 
             return Ok(scheduleData);
         }
@@ -115,17 +122,22 @@ namespace AttendanceControlSystem.Controllers
             var groupResponse = await client.GetStringAsync(URL + "schedule/groups");
             var groupsJsonData = JsonSerializer.Deserialize<GroupModel>(groupResponse);
             if (groupsJsonData == null)
-                return NoContent();
+                throw new Exception("No groups were found");
 
-            var groupId = groupsJsonData.Data.FirstOrDefault(x => x.Name == requestSubjectModel.Group).Id;
-            Guid groupIdGuid = Guid.Empty;
-            if (!Guid.TryParse(groupId, out groupIdGuid))
+            string groupId = string.Empty;
+            try
+            {
+                groupId = groupsJsonData.Data.FirstOrDefault(x => x.Name == requestSubjectModel.Group).Id;
+            }
+            catch 
+            {
                 throw new Exception($"There is no group with such name '{requestSubjectModel.Group}'");
+            }
 
             var scheduleResponse = await client.GetStringAsync($"{URL}schedule/lessons?groupId={groupId}");
             var scheduleJsonData = JsonSerializer.Deserialize<ScheduleModule>(scheduleResponse);
             if (scheduleJsonData == null)
-                return NoContent();
+                throw new Exception("No schedule were found");
 
             var isFirstEducationWeek = IsFirstWeek(requestSubjectModel.Date);
             ScheduleWeek searchedSchedule = default;
@@ -165,14 +177,16 @@ namespace AttendanceControlSystem.Controllers
             };
 
             int position = 1;
-            foreach (var student in students.OrderBy(x => x.FullName)) 
+            foreach (var student in students.OrderBy(x => x.LastName)) 
             {
                 var attendanceInfos = await _attendanceInfoService.GetAttendanceInfoByParametetsAsync(i => i.Time >= startTime && i.Time <= endTime && i.Student.Id == student.Id);
 
                 var studentPresenceInfo = new StudentPresenceInfo
                 {
-                    Name = student.FullName,
-                    IsPresent = attendanceInfos != null,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    MiddleName = student.MiddleName,
+                    IsPresent = attendanceInfos.Count != 0,
                     Position = position++
                 };
 
