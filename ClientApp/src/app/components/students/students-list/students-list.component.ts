@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment.development';
 export class StudentsListComponent implements OnInit {
 
   students: Student[] = [];
+  filteredStudents: Student[] = [];
   baseApiUrl: string = environment.baseApiUrl;
   constructor(private studentService: StudentsService, private router: Router) { }
 
@@ -20,12 +21,26 @@ export class StudentsListComponent implements OnInit {
       .subscribe({
         next: (students) => {
           this.students = students;
+          this.filteredStudents = [...students];
           console.log(students);
         },
         error: (response) => {
           console.log(response);
         }
       })
+  }
+
+  filterStudents(): void {
+    const courseFilter = (document.getElementById('course') as HTMLInputElement)?.value;
+    const groupFilter = (document.getElementById('group') as HTMLInputElement)?.value;
+    const fullNameFilter = (document.getElementById('fullName') as HTMLInputElement)?.value;
+
+    this.filteredStudents = this.students.filter((student) => {
+      const course = !courseFilter || student.course.toString() === courseFilter;
+      const group = !groupFilter || student.group.toLowerCase().includes(groupFilter.toLowerCase());
+      const fullName = !fullNameFilter || `${student.lastName} ${student.firstName} ${student.middleName}`.toLowerCase().includes(fullNameFilter.toLowerCase());
+      return course && group && fullName;
+    });
   }
 
   redirectToCreatingPage() : void {

@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { StudentsListComponent } from './components/students/students-list/students-list.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AddStudentComponent } from './components/students/add-student/add-student.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { EditStudentComponent } from './components/students/edit-student/edit-student.component';
 import { RegisterComponent } from './components/auth/register/register.component';
 import { LoginComponent } from './components/auth/login/login.component';
@@ -61,7 +61,8 @@ import { ToastrModule } from 'ngx-toastr';
       newestOnTop: true,
       timeOut: 3000,
       easeTime: 300
-    })
+    }),
+    ReactiveFormsModule
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

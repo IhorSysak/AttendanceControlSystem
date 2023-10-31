@@ -71,22 +71,6 @@ namespace AttendanceControlSystem.Controllers
 
             await _studentService.RemoveAsync(id);
 
-            if (System.IO.File.Exists(student.ImagePath))
-            {
-                try
-                {
-                    System.IO.File.Delete(student.ImagePath);
-                }
-                catch
-                {
-                    throw new Exception("Removing photo failed");
-                }
-            }
-            else 
-            {
-                throw new Exception("Current photo does not exist");
-            }
-
             return NoContent();
         }
     }

@@ -79,7 +79,19 @@ export class EditStudentComponent implements OnInit {
         error: (response) => {
           console.log(response);
         }
-      })
+      });
+
+      if(this.studentDetails.imagePath !== '') {
+        this.imagesService.deleteImage(this.studentDetails.imagePath)
+          .subscribe({
+            next: (response) => {
+              console.log(response);
+            },
+            error: (response) => {
+              console.log(response);
+            }
+          });
+      }
   }
 
   uploadFile = (event: any) => {
@@ -88,7 +100,8 @@ export class EditStudentComponent implements OnInit {
       return;
     }
 
-    this.imagesService.deleteImage(this.studentDetails.imagePath)
+    if(this.studentDetails.imagePath !== '') {
+      this.imagesService.deleteImage(this.studentDetails.imagePath)
         .subscribe({
           next: (response) => {
             console.log(response);
@@ -97,6 +110,7 @@ export class EditStudentComponent implements OnInit {
             console.log(response);
           }
         });
+    }
 
     let fileToUpload: File = files[0];
     const formData = new FormData();

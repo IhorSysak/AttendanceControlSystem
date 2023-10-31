@@ -3,8 +3,20 @@
         <button type="submit" class="btn btn-success" style="float: right;" (click)="this.redirectToCreatingPage()">Create Student</button>
         <h1 class="mb-3">Students</h1>
     </div>
+
+    <table style="margin-bottom: 25px;">
+        <tr>
+            <td class="search-item"><label for="course" class="form-label">Course</label></td>
+            <td class="search-item"><input type="number" class="form-control" id="course" name="course" (input)="this.filterStudents()"></td>
+            <td class="search-item"><label for="group" class="form-label">Group</label></td>
+            <td class="search-item"><input type="text" class="form-control" id="group" name="group"(input)="this.filterStudents()"></td>
+            <td class="search-item"><label for="fullName" class="form-label">Full Name</label></td>
+            <td class="search-item"><input type="text" style="width: 250%;" class="form-control" id="fullName" name="fullName" (input)="this.filterStudents()"></td>
+        </tr>
+    </table>
+
     <div class="contacts" *ngIf="students && students.length > 0">
-        <div class="contact-card" *ngFor="let student of students" [routerLink]="['edit', student.id]">
+        <div class="contact-card" *ngFor="let student of filteredStudents" [routerLink]="['edit', student.id]">
             <img [src]="this.createImage(student.imagePath)" alt="profile picture" />
             <h3>{{ student.lastName }} {{ student.firstName }} {{ student.middleName }}</h3>
     
@@ -18,5 +30,5 @@
         </div>
     </div>
 
-    <p *ngIf="!students || students.length <=0">No students found</p>
+    <p *ngIf="!filteredStudents || filteredStudents.length <=0">No students found</p>
 </div>
