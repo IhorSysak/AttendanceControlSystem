@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { User } from 'src/app/models/user.model';
+import { RegisterRequest } from 'src/app/models/registerRequest.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -10,9 +10,10 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./add-teacher.component.css']
 })
 export class AddTeacherComponent implements OnInit {
-  addTeacherRequest: User = {
+  addTeacherRequest: RegisterRequest = {
     userName: '',
-    password: ''
+    password: '',
+    role: ''
   };
 
   constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) { }
@@ -20,6 +21,7 @@ export class AddTeacherComponent implements OnInit {
   ngOnInit(): void { }
 
   addTeacher() {
+    this.addTeacherRequest.role = 'Teacher';
     this.authService.register(this.addTeacherRequest)
       .subscribe({
         next: (response) => {

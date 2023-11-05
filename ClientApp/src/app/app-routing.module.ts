@@ -20,16 +20,16 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'students', component: StudentsListComponent },
-  { path: 'students/add', component: AddStudentComponent },
-  { path: 'students/edit/:id', component: EditStudentComponent },
+  { path: 'students/add', component: AddStudentComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher']} },
+  { path: 'students/edit/:id', component: EditStudentComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher']} },
   { path: 'teachers', component: TeachersListComponent, canActivate:[AuthGuardService], data:{roles:['Admin']} },
-  { path: 'teacher/add', component: AddTeacherComponent },
+  { path: 'teacher/add', component: AddTeacherComponent, canActivate:[AuthGuardService], data:{roles:['Admin']}},
   { path: 'forbidden', component: ForbiddenComponent },
-  { path: 'attendanceTracking', component: AttendanceTrackingComponent },
-  { path: 'schedule', component: ScheduleComponent },
-  { path: 'snapshot', component: SnapshotComponent },
-  { path: 'journal', component: JournalComponent },
-  { path: 'export', component: ExportComponent }
+  { path: 'attendanceTracking', component: AttendanceTrackingComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher', 'Student']} },
+  { path: 'schedule', component: ScheduleComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher', 'Student']} },
+  { path: 'snapshot', component: SnapshotComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher', 'Student']} },
+  { path: 'journal', component: JournalComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher', 'Student']} },
+  { path: 'export', component: ExportComponent, canActivate:[AuthGuardService], data:{roles:['Admin', 'Teacher', 'Student']} }
 ];
 
 @NgModule({

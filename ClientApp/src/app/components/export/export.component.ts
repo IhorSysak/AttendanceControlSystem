@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { JournalRequest } from 'src/app/models/journalRequest.model';
 import { JournalResponse } from 'src/app/models/journalResponse.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { ScheduleService } from 'src/app/services/schedule/schedule.service';
 import * as XLSX from 'xlsx';
 
@@ -12,7 +13,7 @@ import * as XLSX from 'xlsx';
 })
 export class ExportComponent {
 
-  constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private router: Router) {}
+  constructor(private scheduleService: ScheduleService, private route: ActivatedRoute, private router: Router, public authService: AuthService) {}
 
   displayedColumns: string[] = ['position', 'lastName', 'firstName', 'middleName', 'isPresent'];
 

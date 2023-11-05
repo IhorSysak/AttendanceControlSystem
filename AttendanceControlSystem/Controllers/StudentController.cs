@@ -10,7 +10,6 @@ namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = RoleConstants.Admin)]
     public class StudentController : ControllerBase
     {
         private readonly IMapper _mapper;
@@ -22,10 +21,12 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}, {RoleConstants.Student}")]
         public async Task<List<Student>> GetAllAsync() =>
             await _studentService.GetAllStudentAsync();
 
         [HttpGet("{id}")]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
         public async Task<IActionResult> GetAsync([FromRoute] string id)
         {
             var student = await _studentService.GetByIdAsync(id);
@@ -36,6 +37,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpGet("GetStundetByParameters")]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
         public async Task<IActionResult> FindStudentByParametesAsync([FromQuery] SearchStudentModel searchStudentModel)
         {
             var student = await _studentService.GetStudentByParametetsAsync(i => i.FirstName == searchStudentModel.FirstName && i.LastName == searchStudentModel.LastName && i.MiddleName == searchStudentModel.MiddleName && i.Group == searchStudentModel.Group && i.Course == searchStudentModel.Course);
@@ -46,6 +48,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
         public async Task<IActionResult> CreateAsync([FromBody] CreateStudentModel createStudentModel)
         {
             var student = _mapper.Map<Student>(createStudentModel);
@@ -55,6 +58,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpPut]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
         public async Task<IActionResult> UpdateAsync([FromBody] StudentModel studentModel)
         {
             var student = _mapper.Map<Student>(studentModel);
@@ -63,6 +67,7 @@ namespace AttendanceControlSystem.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
         public async Task<IActionResult> DeleteAsync([FromRoute] string id)
         {
             var student = await _studentService.GetByIdAsync(id);

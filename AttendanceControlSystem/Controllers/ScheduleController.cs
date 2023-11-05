@@ -2,6 +2,8 @@
 using AttendanceControlSystem.Models.GroupModel;
 using AttendanceControlSystem.Models.JournalModels;
 using AttendanceControlSystem.Models.ScheduleModel;
+using AttendanceControlSystem.Utility;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MongoDB.Driver;
 using System.Text.Json;
@@ -10,6 +12,7 @@ namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}, {RoleConstants.Student}")]
     public class ScheduleController : ControllerBase
     {
         private readonly IAttendanceInfoService _attendanceInfoService;

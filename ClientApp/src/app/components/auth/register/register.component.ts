@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { User } from 'src/app/models/user.model';
+import { RegisterRequest } from 'src/app/models/registerRequest.model';
 import { AuthService } from 'src/app/services/auth/auth.service';
 
 @Component({
@@ -10,9 +10,10 @@ import { AuthService } from 'src/app/services/auth/auth.service';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit { 
-  user: User = {
+  user: RegisterRequest = {
     userName: '',
-    password: ''
+    password: '',
+    role: ''
   }
 
   constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
@@ -20,6 +21,7 @@ export class RegisterComponent implements OnInit {
   ngOnInit() {}
 
   registerUser() {
+    this.user.role = 'Student';
     this.authService.register(this.user)
       .subscribe({
         next: (response) => {

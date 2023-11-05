@@ -1,6 +1,6 @@
 <div class="container my-5">
     <div style="margin-bottom: 15px;">
-        <button type="submit" class="btn btn-success" style="float: right;" (click)="this.redirectToCreatingPage()">Create Student</button>
+        <button type="submit" class="btn btn-success" style="float: right;" *ngIf="this.authService.roleMatch(['Admin', 'Teacher'])" (click)="this.redirectToCreatingPage()">Create Student</button>
         <h1 class="mb-3">Students</h1>
     </div>
 

@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { User } from 'src/app/models/user.model';
 import { Observable } from 'rxjs';
 import jwt_decode from 'jwt-decode';
+import { RegisterRequest } from 'src/app/models/registerRequest.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,8 +15,8 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register(registerRequest: User): Observable<User> {
-    return this.http.post<User>(this.baseApiUrl + '/api/Auth/register', registerRequest);
+  register(registerRequest: RegisterRequest): Observable<User> {
+    return this.http.post<RegisterRequest>(this.baseApiUrl + '/api/Auth/register', registerRequest);
   }
 
   login(loginRequest: User): Observable<string> {

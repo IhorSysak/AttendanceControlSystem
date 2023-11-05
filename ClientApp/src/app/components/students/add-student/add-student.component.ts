@@ -34,9 +34,8 @@ export class AddStudentComponent implements OnInit {
     imagePath: ''
   };
 
-  @ViewChild('firstName') firstName: ElementRef | undefined;
 
-  employeeform!: FormGroup;
+  //employeeform!: FormGroup;
   ngOnInit() : void {
     // this.employeeform = this.formBuilder.group({
     //   firstName: ['', Validators.required, Validators.minLength],

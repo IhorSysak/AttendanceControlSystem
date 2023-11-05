@@ -30,6 +30,7 @@ export class AuthInterceptor implements HttpInterceptor {
                     }
                     else if(err.status === 403) {
                         this.toastr.error('You are not allowed to access this resource', 'Error');
+                        this.router.navigate(['forbidden']);
                         return throwError("You are not allowed to access this resource");
                     }
                     else if(err.status === 500) {

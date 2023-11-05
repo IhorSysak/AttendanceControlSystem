@@ -2,13 +2,14 @@
 using AttendanceControlSystem.Models.TeacherModel;
 using AttendanceControlSystem.Utility;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize(Roles = RoleConstants.Admin)]
+    [Authorize(Roles = RoleConstants.Admin)]
     public class TeacherController : ControllerBase
     {
         private readonly IUserService _userService;

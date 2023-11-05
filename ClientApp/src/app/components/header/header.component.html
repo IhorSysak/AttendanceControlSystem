@@ -7,16 +7,16 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" (click)="this.setHeaderStyle('students')" routerLink="students" *ngIf="this.authService.roleMatch(['Admin'])">Students</a>
+            <a class="nav-link active" aria-current="page" (click)="this.setHeaderStyle('students')" routerLink="students" *ngIf="this.authService.roleMatch(['Admin', 'Teacher', 'Student'])">Students</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" aria-current="page" (click)="this.setHeaderStyle('teachers')" routerLink="teachers" *ngIf="this.authService.roleMatch(['Admin'])">Teachers</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="this.setHeaderStyle('attendanceTracking')" routerLink="attendanceTracking" *ngIf="this.authService.roleMatch(['Admin'])">Check Student</a>
+            <a class="nav-link" aria-current="page" (click)="this.setHeaderStyle('attendanceTracking')" routerLink="attendanceTracking" *ngIf="this.authService.roleMatch(['Admin', 'Teacher', 'Student'])">Check Student</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" aria-current="page" (click)="this.setHeaderStyle('journal')" routerLink="journal" *ngIf="this.authService.roleMatch(['Admin'])">Journal</a>
+            <a class="nav-link" aria-current="page" (click)="this.setHeaderStyle('journal')" routerLink="journal" *ngIf="this.authService.roleMatch(['Admin', 'Teacher', 'Student'])">Journal</a>
           </li>
         </ul>
       </div>

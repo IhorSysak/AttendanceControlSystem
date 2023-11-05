@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Student } from 'src/app/models/student.model';
+import { AuthService } from 'src/app/services/auth/auth.service';
 import { StudentsService } from 'src/app/services/students/students.service';
 import { environment } from 'src/environments/environment.development';
 
@@ -14,7 +15,7 @@ export class StudentsListComponent implements OnInit {
   students: Student[] = [];
   filteredStudents: Student[] = [];
   baseApiUrl: string = environment.baseApiUrl;
-  constructor(private studentService: StudentsService, private router: Router) { }
+  constructor(private studentService: StudentsService, private router: Router, public authService: AuthService) { }
 
   ngOnInit(): void {
     this.studentService.getAllStudents()

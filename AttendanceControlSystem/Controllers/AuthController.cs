@@ -2,7 +2,6 @@
 using AttendanceControlSystem.Interfaces;
 using AttendanceControlSystem.Models.AuthModel;
 using AttendanceControlSystem.Models.UserModels;
-using AttendanceControlSystem.Utility;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +31,7 @@ namespace AttendanceControlSystem.Controllers
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(UserModel userModel)
+        public async Task<ActionResult<User>> Register(RegisterModel userModel)
         {
             var user = _mapper.Map<User>(userModel);
 
@@ -40,7 +39,6 @@ namespace AttendanceControlSystem.Controllers
 
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.Role = RoleConstants.Teacher;
 
             try
             {
@@ -162,9 +160,7 @@ namespace AttendanceControlSystem.Controllers
         {
             List<Claim> claims = new List<Claim> {
                 new Claim(ClaimTypes.Name, user.UserName),
-                /*new Claim(ClaimTypes.Role, user.Role),*/
-                new Claim(ClaimTypes.Role, RoleConstants.Admin),
-                new Claim(ClaimTypes.Role, RoleConstants.Teacher),
+                new Claim(ClaimTypes.Role, user.Role)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

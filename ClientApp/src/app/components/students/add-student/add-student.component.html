@@ -8,7 +8,7 @@
                   <label for="firstName" class="form-label">First Name</label>
                   <input type="text" class="form-control" id="firstName" required minlength="4" name="firstName" [(ngModel)]="addStudentRequest.firstName" #firstNameField="ngModel" #firstName>
                   
-                  <div *ngIf="firstNameField.invalid && (firstNameField.dirty || firstNameField.touched)" class="alert">
+                  <!-- <div *ngIf="firstNameField.invalid && (firstNameField.dirty || firstNameField.touched)" class="alert">
 
                         <div *ngIf="firstNameField.errors?.['required']">
                             Name is required.
@@ -16,7 +16,7 @@
                         <div *ngIf="firstNameField.errors?.['minlength']">
                             Name must be at least 4 characters long.
                         </div>
-                    </div>
+                    </div> -->
 
                 </div>
 

@@ -9,7 +9,7 @@ namespace AttendanceControlSystem.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = RoleConstants.Admin)]
+    [Authorize(Roles = $"{RoleConstants.Admin}, {RoleConstants.Teacher}")]
     public class UploadController : ControllerBase
     {
         [HttpPost, DisableRequestSizeLimit]
